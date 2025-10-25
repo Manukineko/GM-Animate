@@ -173,9 +173,26 @@ function animation_delete(_track) {
 /// @param {Real} _track The track to check.
 /// @return {Bool} Whether the animation finished this step or not
 function animation_finished(_track = 0) {
-	__animation_error_checks
+	__animation_error_checks;
 	
 	return animations[_track].finished;
+}
+
+/// @desc Checks if an animation reached the end of it's last frame this step.
+///	@param {Asset.GMSprite=undefined} Check is perform on a that specific sprite
+/// @param {Real} _track The track to check.
+/// @return {Bool} Whether the animation finished this step or not
+function animation_finished_on(_sprite = undefined, _track = 0) {
+	__animation_error_checks;
+	
+	if is_undefined(_sprite) {
+		return animations[_track].finished;
+	}
+	
+	if animations[_track].sprite_index == _sprite{
+	    return animations[_track].finished;
+    }
+    return false;
 }
 
 /// @desc Checks if an animation is currently on the specified frame. Can return true multiple steps in a row.
@@ -183,7 +200,7 @@ function animation_finished(_track = 0) {
 /// @param {Real} _track The track to check.
 /// @return {Bool} Whether the animation is on the specified frame or not
 function animation_on_frame(_frame, _track = 0) {
-	__animation_error_checks
+	__animation_error_checks;
 	
 	if is_array(_frame) {
 		for (var i = 0, _len = array_length(_frame); i < _len; ++i) {
