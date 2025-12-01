@@ -1,13 +1,5 @@
 /// feather ignore all
 
-function GetAnimForGMAnimate(_anim, _animset){
-	    if variable_struct_exists(_animset, _anim){
-	        return _animset[$ _anim].sprite;
-	    }
-        show_debug_message($"[WARNING] No Sprite found: anim {_anim} for {id}");
-        return _animset.no_anim;
-}
-
 /// @desc Plays an animation. Must be called at least once on an object before using any other animation functions.
 /// Creates a new animation struct, so if the specified track already has an animation playing then
 /// effects, the animation queue, and variable changes will be reset.
@@ -40,15 +32,20 @@ function animation_run() {
 /// @param {Real} _starting_image_index The frame to start the new animation on. Pass -1 to not change image_index and keep the frame of the previous animation.
 /// @param {Bool} _loop Whether the animation should loop or not upon completion.
 /// @param {Real} _track The track to change the animation on.
-/// @param {Bool} _set_mask if true, the 
+/// @param {Bool=__gmanimate_auto_mask} _set_mask Update the mask_index of the instance (default is __gmanimate_auto_mask)
+/// @param {asset.GMSprite=-1} _mask the sprite to use as mask. default is the same as the current sprite_index
+/// @param {Bool=__gmanimate_auto_mask} _use_scale Whether to match the instance's image_xscale and image_yscale to the animation's image_xscale and image_yscale. 
+/// @param {Bool=__gmanimate_auto_mask} _use_angle Whether to match the instance's image_angle to the animation's image_angle.
 /// @return {Struct} Animation struct
-function animation_change(_sprite, _starting_image_index = 0, _loop = true, _track = 0, _set_mask = __gmanimate_auto_mask, _mask = -1, _use_scale = __gmanimate_auto_mask, _use_rotate = __gmanimate_auto_mask) {
+function animation_change(_sprite, _starting_image_index = 0, _loop = true, _track = 0, _set_mask = false, _mask = -1, _use_scale = false, _use_angle = false) {
 	__animation_error_checks
-	
-	if is_string(_sprite) {
-		//_sprite = getSprite(_sprite);
+
+	if gmanimate_animset_enable{
+		//if is_string(_sprite){
+			_sprite = animations[_track].__getAnim(_sprite);
+		//}
 	}
-	
+
 	with animations[_track] {
 		if sprite_index != _sprite {
 			sprite_index = _sprite;
@@ -64,7 +61,7 @@ function animation_change(_sprite, _starting_image_index = 0, _loop = true, _tra
 		loop = _loop;
 	}
 	
-	if _set_mask {
+	if _set_mask{
 		animation_set_instance_mask(_mask, _use_scale, _use_angle, _track);
 	}
 	
@@ -122,6 +119,7 @@ function animation_draw_ext(_x = undefined, _y = undefined, _image_index = undef
 /// @desc Set the instance's collision mask to match the specified animation track. Effects (such as shake, squash and stretch) will not affect the mask's position or size.
 /// WARNING: This function changes the calling instance's mask_index and image_index, so it will interfere with built in animation.
 /// Additionally, it will change the calling instance's image_xscale, image_yscale, and/or image_angle if _use_scale and/or _use_angle are set to true. 
+/// @param {asset.GMSprite:-1} the mask to use (default is -1, the same than the sprite)
 /// @param {Bool} _use_scale Whether to match the instance's image_xscale and image_yscale to the animation's image_xscale and image_yscale. 
 /// @param {Bool} _use_angle Whether to match the instance's image_angle to the animation's image_angle. 
 /// @param {Real} _track The track to get the sprite from to use as the collision mask.
@@ -144,7 +142,7 @@ function animation_set_instance_mask(_mask = -1, _use_scale = false, _use_angle 
 /// @param {Real} _track The track to get. Pass `all` to get an array of all animation structs. 
 /// @return {Array<Struct>|Struct} Animation struct or array of animation structs
 function animation_get(_track = 0) {
-	__animation_error_checks;
+	__animation_error_checks
 	if _track == all {
 		return animations;
 	}

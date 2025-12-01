@@ -11,6 +11,11 @@ jump_speed = 20;
 grav = 0.7;
 grounded = false;
 
+animlist = {
+	idle_bow:sprKnight_Idle_Bow,
+	walk_bow:sprKnight_Walk_Bow
+}
+
 collision_and_move = function() {
 	if place_meeting(x + hsp, y, obj_wall) {
 		repeat(ceil(abs(hsp))) {
@@ -35,7 +40,7 @@ collision_and_move = function() {
 
 idle = new create_state();
 idle.enter = function() {
-	animation_change(sprKnight_Idle_Bow);
+	animation_change("idle_bow");
 	hsp = 0;
 }
 idle.step = function() {
@@ -59,7 +64,7 @@ idle.step = function() {
 
 walk = new create_state();
 walk.enter = function() {
-	animation_change(sprKnight_Walk_Bow);	
+	animation_change("walk_bow");	
 }
 walk.step = function() {
 	hsp = hor_input * move_spd;
@@ -138,7 +143,7 @@ jump.step = function() {
 
 falling = new create_state();
 falling.enter = function() {
-	animation_change(sprKnight_Jump_Airborne_Bow);	
+	animation_change(sprKnight_Jump_Airborne_Bow, , , , true, sprKnight_Arrow);	
 }
 falling.step = function() {
 	hsp = hor_input * move_spd;
@@ -151,7 +156,7 @@ falling.step = function() {
 
 shoot = new create_state();
 shoot.enter = function() {
-	animation_change(sprKnight_Attack_Bow, 0, false);
+	animation_change(sprKnight_Attack_Bow, 0, false, , true);
 }
 
 shoot.step = function() {
@@ -169,5 +174,10 @@ shoot.step = function() {
 
 state = idle;
 anim = animation_start(sprKnight_Idle_Bow);
+var _read_animlist = function(_sprite){
+	if !is_string(_sprite) return _sprite
+	return animlist[$ _sprite];
+}
+animation_bind_animset(_read_animlist);
 
 sprite_prefetch_multi([sprKnight_Jump_Airborne_Bow, sprKnight_Jump_Up_Bow, sprKnight_Walk_Bow, sprKnight_Idle_Bow]);
