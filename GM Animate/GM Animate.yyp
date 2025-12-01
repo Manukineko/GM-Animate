@@ -71,6 +71,7 @@
     {"id":{"name":"__scr_animation_event_control","path":"scripts/__scr_animation_event_control/__scr_animation_event_control.yy",},},
     {"id":{"name":"__scr_animation_macros","path":"scripts/__scr_animation_macros/__scr_animation_macros.yy",},},
     {"id":{"name":"__scr_curve_core","path":"scripts/__scr_curve_core/__scr_curve_core.yy",},},
+    {"id":{"name":"scr_animation_animset","path":"scripts/scr_animation_animset/scr_animation_animset.yy",},},
     {"id":{"name":"scr_animation_control","path":"scripts/scr_animation_control/scr_animation_control.yy",},},
     {"id":{"name":"scr_animation_effects","path":"scripts/scr_animation_effects/scr_animation_effects.yy",},},
     {"id":{"name":"scr_animation_events","path":"scripts/scr_animation_events/scr_animation_events.yy",},},

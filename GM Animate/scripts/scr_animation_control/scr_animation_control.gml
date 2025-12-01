@@ -32,9 +32,19 @@ function animation_run() {
 /// @param {Real} _starting_image_index The frame to start the new animation on. Pass -1 to not change image_index and keep the frame of the previous animation.
 /// @param {Bool} _loop Whether the animation should loop or not upon completion.
 /// @param {Real} _track The track to change the animation on.
+/// @param {Bool=__gmanimate_auto_mask} _set_mask Update the mask_index of the instance (default is __gmanimate_auto_mask)
+/// @param {asset.GMSprite=-1} _mask the sprite to use as mask. default is the same as the current sprite_index
+/// @param {Bool=__gmanimate_auto_mask} _use_scale Whether to match the instance's image_xscale and image_yscale to the animation's image_xscale and image_yscale. 
+/// @param {Bool=__gmanimate_auto_mask} _use_angle Whether to match the instance's image_angle to the animation's image_angle.
 /// @return {Struct} Animation struct
-function animation_change(_sprite, _starting_image_index = 0, _loop = true, _track = 0) {
+function animation_change(_sprite, _starting_image_index = 0, _loop = true, _track = 0, _set_mask = false, _mask = -1, _use_scale = false, _use_angle = false) {
 	__animation_error_checks
+
+	if gmanimate_animset_enable{
+		//if is_string(_sprite){
+			_sprite = animations[_track].__getAnim(_sprite);
+		//}
+	}
 
 	with animations[_track] {
 		if sprite_index != _sprite {
@@ -50,6 +60,11 @@ function animation_change(_sprite, _starting_image_index = 0, _loop = true, _tra
 		}
 		loop = _loop;
 	}
+	
+	if _set_mask{
+		animation_set_instance_mask(_mask, _use_scale, _use_angle, _track);
+	}
+	
 	return animations[_track];
 }
 
@@ -104,14 +119,15 @@ function animation_draw_ext(_x = undefined, _y = undefined, _image_index = undef
 /// @desc Set the instance's collision mask to match the specified animation track. Effects (such as shake, squash and stretch) will not affect the mask's position or size.
 /// WARNING: This function changes the calling instance's mask_index and image_index, so it will interfere with built in animation.
 /// Additionally, it will change the calling instance's image_xscale, image_yscale, and/or image_angle if _use_scale and/or _use_angle are set to true. 
+/// @param {asset.GMSprite:-1} the mask to use (default is -1, the same than the sprite)
 /// @param {Bool} _use_scale Whether to match the instance's image_xscale and image_yscale to the animation's image_xscale and image_yscale. 
 /// @param {Bool} _use_angle Whether to match the instance's image_angle to the animation's image_angle. 
 /// @param {Real} _track The track to get the sprite from to use as the collision mask.
-function animation_set_instance_mask(_use_scale = false, _use_angle = false, _track = 0) {
+function animation_set_instance_mask(_mask = -1, _use_scale = false, _use_angle = false, _track = 0) {
 	__animation_error_checks
 	
 	var _anim = animations[_track];
-	mask_index = _anim.sprite_index;
+	mask_index = _mask == -1 ? _anim.sprite_index : _mask;
 	image_index = _anim.image_index;
 	if _use_scale == true {
 		image_xscale = _anim.image_xscale;
