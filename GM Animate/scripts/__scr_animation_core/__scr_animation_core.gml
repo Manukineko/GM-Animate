@@ -42,6 +42,8 @@ function __animation(_sprite, _loop = true) constructor {
 	loop = _loop;
 	paused = false;
 	effect_pause = false;
+	use_animset = false;
+	animset_get_sprite = undefined;
 	
 	finished = false;
 	new_frame = -1;

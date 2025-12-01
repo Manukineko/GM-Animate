@@ -40,10 +40,10 @@ function animation_run() {
 function animation_change(_sprite, _starting_image_index = 0, _loop = true, _track = 0, _set_mask = false, _mask = -1, _use_scale = false, _use_angle = false) {
 	__animation_error_checks
 
-	if gmanimate_animset_enable{
-		//if is_string(_sprite){
-			_sprite = animations[_track].__getAnim(_sprite);
-		//}
+	if use_animset{
+
+		_sprite = animations[_track].__getAnim(_sprite);
+
 	}
 
 	with animations[_track] {
