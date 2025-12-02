@@ -25,6 +25,8 @@ function __animation(_sprite, _loop = true) constructor {
 	static __animation_variable_setup = function() {
 		image_number = sprite_get_number(sprite_index);
 		sprite_speed = __animation_get_speed(sprite_index);
+		sprite_width = sprite_get_width(sprite_index); //raw size
+		sprite_height = sprite_get_height(sprite_index); //raw size
 	}
 	
 	sprite_index = _sprite;
@@ -40,6 +42,8 @@ function __animation(_sprite, _loop = true) constructor {
 	loop = _loop;
 	paused = false;
 	effect_pause = false;
+	use_animset = false;
+	animset_get_sprite = undefined;
 	
 	finished = false;
 	new_frame = -1;
@@ -132,6 +136,7 @@ function __animation(_sprite, _loop = true) constructor {
 			sprite_index = _queue_data.sprite_index;
 			image_index = 0;
 			image_speed = 1;
+			finished = false; // reset in order to trigger the finished flag on the queueed sprite
 			loop = _queue_data.loop;
 			__animation_variable_setup();
 		}

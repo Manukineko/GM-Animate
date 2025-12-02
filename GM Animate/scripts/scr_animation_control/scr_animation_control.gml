@@ -15,7 +15,6 @@ function animation_start(_sprite, _loop = true, _track = 0) {
 
 /// @desc Runs the animations for this object. Must be called in a step event for animations to work.
 function animation_run() {
-		
 	__animation_array_error();
 		
 	for(var i = 0, _len = array_length(animations); i < _len; i++;) { 
@@ -29,28 +28,33 @@ function animation_run() {
 
 /// @desc Change an animation track to a different sprite without resetting effects, the animation queue, or variables.
 /// The equivalent of changing sprite_index when using GameMaker's built in animation.
-/// @param {asset.GMSprite} _sprite The sprite asset to animate.
+/// @param {asset.GMSprite|String} _sprite The sprite asset or a string to animate.
 /// @param {Real} _starting_image_index The frame to start the new animation on. Pass -1 to not change image_index and keep the frame of the previous animation.
 /// @param {Bool} _loop Whether the animation should loop or not upon completion.
 /// @param {Real} _track The track to change the animation on.
+/// @param {Bool=__gmanimate_auto_mask} _set_mask Update the mask_index of the instance (default is __gmanimate_auto_mask)
+/// @param {asset.GMSprite=-1} _mask the sprite to use as mask. default is the same as the current sprite_index
+/// @param {Bool=__gmanimate_auto_mask} _use_scale Whether to match the instance's image_xscale and image_yscale to the animation's image_xscale and image_yscale. 
+/// @param {Bool=__gmanimate_auto_mask} _use_angle Whether to match the instance's image_angle to the animation's image_angle.
 /// @return {Struct} Animation struct
 function animation_change(_sprite, _starting_image_index = 0, _loop = true, _track = 0) {
 	__animation_error_checks
 
 	with animations[_track] {
 		if sprite_index != _sprite {
-			if loop == false and image_speed == 0 {
-				image_speed = 1;
-			}
 			sprite_index = _sprite;
 			sprite_name = sprite_get_name(sprite_index);
+			__animation_variable_setup();
 			if _starting_image_index != -1 {
 				image_index = _starting_image_index;
 			}
-			loop = _loop;
-			__animation_variable_setup();
 		}
+		if loop == false and image_speed == 0 {
+			image_speed = 1;
+		}
+		loop = _loop;
 	}
+	
 	return animations[_track];
 }
 
@@ -105,14 +109,15 @@ function animation_draw_ext(_x = undefined, _y = undefined, _image_index = undef
 /// @desc Set the instance's collision mask to match the specified animation track. Effects (such as shake, squash and stretch) will not affect the mask's position or size.
 /// WARNING: This function changes the calling instance's mask_index and image_index, so it will interfere with built in animation.
 /// Additionally, it will change the calling instance's image_xscale, image_yscale, and/or image_angle if _use_scale and/or _use_angle are set to true. 
+/// @param {asset.GMSprite:-1} the mask to use (default is -1, the same than the sprite)
 /// @param {Bool} _use_scale Whether to match the instance's image_xscale and image_yscale to the animation's image_xscale and image_yscale. 
 /// @param {Bool} _use_angle Whether to match the instance's image_angle to the animation's image_angle. 
 /// @param {Real} _track The track to get the sprite from to use as the collision mask.
-function animation_set_instance_mask(_use_scale = false, _use_angle = false, _track = 0) {
+function animation_set_instance_mask(_mask = -1, _use_scale = false, _use_angle = false, _track = 0) {
 	__animation_error_checks
 	
 	var _anim = animations[_track];
-	mask_index = _anim.sprite_index;
+	mask_index = _mask == -1 ? _anim.sprite_index : _mask;
 	image_index = _anim.image_index;
 	if _use_scale == true {
 		image_xscale = _anim.image_xscale;
@@ -174,9 +179,26 @@ function animation_delete(_track) {
 /// @param {Real} _track The track to check.
 /// @return {Bool} Whether the animation finished this step or not
 function animation_finished(_track = 0) {
-	__animation_error_checks
+	__animation_error_checks;
 	
 	return animations[_track].finished;
+}
+
+/// @desc Checks if an animation reached the end of it's last frame this step.
+///	@param {Asset.GMSprite=undefined} Check is perform on a that specific sprite
+/// @param {Real} _track The track to check.
+/// @return {Bool} Whether the animation finished this step or not
+function animation_finished_on(_sprite = undefined, _track = 0) {
+	__animation_error_checks;
+	
+	if is_undefined(_sprite) {
+		return animations[_track].finished;
+	}
+	
+	if animations[_track].sprite_index == _sprite{
+	    return animations[_track].finished;
+    }
+    return false;
 }
 
 /// @desc Checks if an animation is currently on the specified frame. Can return true multiple steps in a row.
@@ -184,7 +206,7 @@ function animation_finished(_track = 0) {
 /// @param {Real} _track The track to check.
 /// @return {Bool} Whether the animation is on the specified frame or not
 function animation_on_frame(_frame, _track = 0) {
-	__animation_error_checks
+	__animation_error_checks;
 	
 	if is_array(_frame) {
 		for (var i = 0, _len = array_length(_frame); i < _len; ++i) {
