@@ -28,7 +28,7 @@ function animation_run() {
 
 /// @desc Change an animation track to a different sprite without resetting effects, the animation queue, or variables.
 /// The equivalent of changing sprite_index when using GameMaker's built in animation.
-/// @param {asset.GMSprite} _sprite The sprite asset to animate.
+/// @param {asset.GMSprite|String} _sprite The sprite asset or a string to animate.
 /// @param {Real} _starting_image_index The frame to start the new animation on. Pass -1 to not change image_index and keep the frame of the previous animation.
 /// @param {Bool} _loop Whether the animation should loop or not upon completion.
 /// @param {Real} _track The track to change the animation on.
@@ -37,14 +37,8 @@ function animation_run() {
 /// @param {Bool=__gmanimate_auto_mask} _use_scale Whether to match the instance's image_xscale and image_yscale to the animation's image_xscale and image_yscale. 
 /// @param {Bool=__gmanimate_auto_mask} _use_angle Whether to match the instance's image_angle to the animation's image_angle.
 /// @return {Struct} Animation struct
-function animation_change(_sprite, _starting_image_index = 0, _loop = true, _track = 0, _set_mask = false, _mask = -1, _use_scale = false, _use_angle = false) {
+function animation_change(_sprite, _starting_image_index = 0, _loop = true, _track = 0) {
 	__animation_error_checks
-
-	if gmanimate_animset_enable{
-		//if is_string(_sprite){
-			_sprite = animations[_track].__getAnim(_sprite);
-		//}
-	}
 
 	with animations[_track] {
 		if sprite_index != _sprite {
@@ -59,10 +53,6 @@ function animation_change(_sprite, _starting_image_index = 0, _loop = true, _tra
 			image_speed = 1;
 		}
 		loop = _loop;
-	}
-	
-	if _set_mask{
-		animation_set_instance_mask(_mask, _use_scale, _use_angle, _track);
 	}
 	
 	return animations[_track];

@@ -23,6 +23,7 @@
     {"name":"scr_animation_animset","order":5,"path":"scripts/scr_animation_animset/scr_animation_animset.yy",},
     {"name":"scr_animation_effects","order":1,"path":"scripts/scr_animation_effects/scr_animation_effects.yy",},
     {"name":"scr_animation_events","order":5,"path":"scripts/scr_animation_events/scr_animation_events.yy",},
+    {"name":"scr_animation_mask","order":6,"path":"scripts/scr_animation_mask/scr_animation_mask.yy",},
     {"name":"scr_animation_pausing","order":4,"path":"scripts/scr_animation_pausing/scr_animation_pausing.yy",},
     {"name":"scr_animation_queue","order":2,"path":"scripts/scr_animation_queue/scr_animation_queue.yy",},
     {"name":"SFX_Fire1","order":10,"path":"sounds/SFX_Fire1/SFX_Fire1.yy",},
