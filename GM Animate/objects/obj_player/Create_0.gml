@@ -40,7 +40,7 @@ collision_and_move = function() {
 
 idle = new create_state();
 idle.enter = function() {
-	animation_animset_change_ext("idle_bow");
+	animation_change("idle_bow", , ,true);
 	hsp = 0;
 }
 idle.step = function() {
@@ -64,7 +64,7 @@ idle.step = function() {
 
 walk = new create_state();
 walk.enter = function() {
-	animation_animset_change_ext("walk_bow");	
+	animation_change("walk_bow", , , true);	
 }
 walk.step = function() {
 	hsp = hor_input * move_spd;
@@ -178,6 +178,6 @@ var _read_animlist = function(_sprite){
 	if !is_string(_sprite) return _sprite
 	return animlist[$ _sprite];
 }
-animation_animset_bind(_read_animlist);
+//animation_set_sprite_mapper(_read_animlist);
 
 sprite_prefetch_multi([sprKnight_Jump_Airborne_Bow, sprKnight_Jump_Up_Bow, sprKnight_Walk_Bow, sprKnight_Idle_Bow]);

@@ -7,11 +7,13 @@
 /// @param {asset.GMSprite} _sprite The sprite asset to animate.
 /// @param {Bool} _loop Whether the animation should loop or not upon completion.
 /// @param {Real} _track The track to play the animation on.
+/// @param {Bool} _use_mapper use the sprite mapper callback to retrieve asprite in an animset (a struct/an array/ etc)
+/// @param {Function} _sprite_mapper_callback the sprite mapper callback to use. 
 /// @return {Struct} Animation struct
-function animation_start(_sprite, _loop = true, _track = 0, _use_mapper, _sprite_mapper_callback ) {
+function animation_start(_sprite, _loop = true, _track = 0, _use_mapper = false, _sprite_mapper_callback = default_sprite_mapper_get_anim) {
 	
     if _use_mapper{
-        _sprite = _sprite_mapper_callback(_sprite)
+        _sprite = _sprite_mapper_callback(_sprite);
     }
     animations[_track] = new __animation(_sprite, _loop, _use_mapper, _sprite_mapper_callback);
 	return animations[_track];
@@ -35,18 +37,15 @@ function animation_run() {
 /// @param {asset.GMSprite|String} _sprite The sprite asset or a string to animate.
 /// @param {Real} _starting_image_index The frame to start the new animation on. Pass -1 to not change image_index and keep the frame of the previous animation.
 /// @param {Bool} _loop Whether the animation should loop or not upon completion.
+/// @param {Bool|Undefined} _use_mapper activate or deactivate the mapper callback temporarly. It overrides, without changing, the global value set for the animations struct.
 /// @param {Real} _track The track to change the animation on.
-/// @param {Bool=__gmanimate_auto_mask} _set_mask Update the mask_index of the instance (default is __gmanimate_auto_mask)
-/// @param {asset.GMSprite=-1} _mask the sprite to use as mask. default is the same as the current sprite_index
-/// @param {Bool=__gmanimate_auto_mask} _use_scale Whether to match the instance's image_xscale and image_yscale to the animation's image_xscale and image_yscale. 
-/// @param {Bool=__gmanimate_auto_mask} _use_angle Whether to match the instance's image_angle to the animation's image_angle.
 /// @return {Struct} Animation struct
 function animation_change(_sprite, _starting_image_index = 0, _loop = true, _use_mapper = undefined, _track = 0) {
-	__animation_error_checks
+	__animation_error_checks;
     
-    _use_mapper = is_undefined(_use_mapper) ? animations[_track].use_mapper : _use_mapper
+    _use_mapper = is_undefined(_use_mapper) ? animations[_track].use_mapper : _use_mapper;
     if _use_mapper{
-        _sprite = animations[_track].mapper_get_sprite(_sprite)
+        _sprite = animations[_track].mapper_get_sprite(_sprite);
     }
     
     with animations[_track] {

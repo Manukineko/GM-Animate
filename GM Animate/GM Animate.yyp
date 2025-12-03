@@ -2,7 +2,7 @@
   "$GMProject":"v1",
   "%Name":"GM Animate",
   "AudioGroups":[
-    {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
+    {"$GMAudioGroup":"v1","%Name":"audiogroup_default","exportDir":"","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
   ],
   "configs":{
     "children":[],
@@ -44,7 +44,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.13.1.193",
+    "IDEVersion":"2024.14.1.210",
   },
   "name":"GM Animate",
   "resources":[
@@ -71,10 +71,10 @@
     {"id":{"name":"__scr_animation_event_control","path":"scripts/__scr_animation_event_control/__scr_animation_event_control.yy",},},
     {"id":{"name":"__scr_animation_macros","path":"scripts/__scr_animation_macros/__scr_animation_macros.yy",},},
     {"id":{"name":"__scr_curve_core","path":"scripts/__scr_curve_core/__scr_curve_core.yy",},},
-    {"id":{"name":"scr_animation_animset","path":"scripts/scr_animation_animset/scr_animation_animset.yy",},},
     {"id":{"name":"scr_animation_control","path":"scripts/scr_animation_control/scr_animation_control.yy",},},
     {"id":{"name":"scr_animation_effects","path":"scripts/scr_animation_effects/scr_animation_effects.yy",},},
     {"id":{"name":"scr_animation_events","path":"scripts/scr_animation_events/scr_animation_events.yy",},},
+    {"id":{"name":"scr_animation_mapper","path":"scripts/scr_animation_mapper/scr_animation_mapper.yy",},},
     {"id":{"name":"scr_animation_mask","path":"scripts/scr_animation_mask/scr_animation_mask.yy",},},
     {"id":{"name":"scr_animation_pausing","path":"scripts/scr_animation_pausing/scr_animation_pausing.yy",},},
     {"id":{"name":"scr_animation_queue","path":"scripts/scr_animation_queue/scr_animation_queue.yy",},},
