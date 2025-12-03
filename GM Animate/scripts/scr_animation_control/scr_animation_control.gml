@@ -8,8 +8,12 @@
 /// @param {Bool} _loop Whether the animation should loop or not upon completion.
 /// @param {Real} _track The track to play the animation on.
 /// @return {Struct} Animation struct
-function animation_start(_sprite, _loop = true, _track = 0) {
-	animations[_track] = new __animation(_sprite, _loop);
+function animation_start(_sprite, _loop = true, _track = 0, _use_mapper, _sprite_mapper_callback ) {
+	
+    if _use_mapper{
+        _sprite = _sprite_mapper_callback(_sprite)
+    }
+    animations[_track] = new __animation(_sprite, _loop, _use_mapper, _sprite_mapper_callback);
 	return animations[_track];
 }
 
@@ -37,10 +41,15 @@ function animation_run() {
 /// @param {Bool=__gmanimate_auto_mask} _use_scale Whether to match the instance's image_xscale and image_yscale to the animation's image_xscale and image_yscale. 
 /// @param {Bool=__gmanimate_auto_mask} _use_angle Whether to match the instance's image_angle to the animation's image_angle.
 /// @return {Struct} Animation struct
-function animation_change(_sprite, _starting_image_index = 0, _loop = true, _track = 0) {
+function animation_change(_sprite, _starting_image_index = 0, _loop = true, _use_mapper = undefined, _track = 0) {
 	__animation_error_checks
-
-	with animations[_track] {
+    
+    _use_mapper = is_undefined(_use_mapper) ? animations[_track].use_mapper : _use_mapper
+    if _use_mapper{
+        _sprite = animations[_track].mapper_get_sprite(_sprite)
+    }
+    
+    with animations[_track] {
 		if sprite_index != _sprite {
 			sprite_index = _sprite;
 			sprite_name = sprite_get_name(sprite_index);

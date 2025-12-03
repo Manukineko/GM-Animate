@@ -8,9 +8,14 @@
 /// @param {Bool=true} _set_mask Update the mask_index of the instance (default is true). it will also
 /// @param {asset.GMSprite=-1} _mask the sprite to use as mask. default is the same as the current sprite_index
 /// @return {Struct} Animation struct
-function animation_change_ext(_sprite, _starting_image_index = 0, _loop = true, _track = 0, _set_mask = false, _mask = -1) {
+function animation_change_ext(_sprite, _starting_image_index = 0, _loop = true, _use_mapper = undefined, _track = 0, _set_mask = false, _mask = -1) {
 	__animation_error_checks
-
+    
+    _use_mapper = is_undefined(_use_mapper) ? animations[_track].use_mapper : _use_mapper
+    if _use_mapper{
+        _sprite = animations[_track].mapper_get_sprite(_sprite)
+    }
+    
 	with animations[_track] {
 		if sprite_index != _sprite {
 			sprite_index = _sprite;
@@ -43,14 +48,14 @@ function animation_change_ext(_sprite, _starting_image_index = 0, _loop = true, 
 /// @param {Bool=true} _set_mask Update the mask_index of the instance (default is true). it will also
 /// @param {asset.GMSprite=-1} _mask the sprite to use as mask. default is the same as the current sprite_index
 /// @return {Struct} Animation struct
-function animation_animset_change_ext(_sprite, _starting_image_index = 0, _loop = true, _track = 0, _set_mask = false, _mask = -1) {
-	__animation_error_checks
+// function animation_animset_change_ext(_sprite, _starting_image_index = 0, _loop = true, _track = 0, _set_mask = false, _mask = -1) {
+// 	__animation_error_checks
 
-	if !is_undefined(animations[_track].animset_get_sprite){
-		__animation_resolver_error(_track)
-	}
+// 	if !is_undefined(animations[_track].animset_get_sprite){
+// 		__animation_resolver_error(_track)
+// 	}
 	
-	_sprite = animations[_track].animset_get_sprite(_sprite);
+// 	_sprite = animations[_track].animset_get_sprite(_sprite);
 	
-	return animation_change_ext(_sprite, _starting_image_index, _loop, _track, _set_mask, _mask);
-}
+// 	return animation_change_ext(_sprite, _starting_image_index, _loop, _track, _set_mask, _mask);
+// }

@@ -4,7 +4,7 @@
 ///@param {Handle} _resolver the function to call to retrieve the sprite in your animset.
 ///@param {Real|Struct} _scope the scope for which the resolver will be called. Default is the calling instance and it should be right for a majority of use-cases. 
 ///@param {Int} _track The track to set the resolver to. Use `all` to set it to all the tracks.
-function animation_animset_bind(_resolver, _scope = self, _track = 0){
+function animation_set_sprite_mapper(_sprite_mapper_callback, _scope = self, _track = 0){
 	__animation_error_checks;
 	
 	if _track == all {
@@ -12,10 +12,10 @@ function animation_animset_bind(_resolver, _scope = self, _track = 0){
 			if animations[i] == 0 {
 				continue;	
 			}
-			animations[i].animset_get_sprite = method(_scope, _resolver);
+			animations[i].mapper_get_sprite = method(_scope, _sprite_mapper_callback);
 		}
 	}
-	animations[_track].animset_get_sprite = method(_scope, _resolver);
+	animations[_track].mapper_get_sprite = method(_scope, _sprite_mapper_callback);
 }
 
 /// @desc Change an animation track to a different sprite from a bound animset without resetting effects, the animation queue, or variables.
@@ -25,20 +25,24 @@ function animation_animset_bind(_resolver, _scope = self, _track = 0){
 /// @param {Bool} _loop Whether the animation should loop or not upon completion.
 /// @param {Real} _track The track to change the animation on.
 /// @return {Struct} Animation struct
-function animation_animset_change(_sprite, _starting_image_index = 0, _loop = true, _track = 0) {
-	__animation_error_checks
+// function animation_animset_change(_sprite, _starting_image_index = 0, _loop = true, _track = 0) {
+// 	__animation_error_checks
 
-	if !is_undefined(animations[_track].animset_get_sprite){
-		__animation_resolver_error(_track)
-	}
+// 	if !is_undefined(animations[_track].animset_get_sprite){
+// 		__animation_resolver_error(_track)
+// 	}
 	
-	_sprite = animations[_track].animset_get_sprite(_sprite);
+// 	_sprite = animations[_track].animset_get_sprite(_sprite);
 	
-	return animation_change(_sprite, _starting_image_index, _loop, _track);
-}
+// 	return animation_change(_sprite, _starting_image_index, _loop, _track);
+// }
 
 function __animation_resolver_error(_track){
-	if is_undefined(animations[_track].animset_get_sprite){
+	if is_undefined(animations[_track].mapper_get_sprite){
 		show_error($"GM Animate - The resolver function is undefined for track {_track}\nYou need to define it with `animation_animset_bind` first.", true);
 	}
+}
+
+function default_sprite_mapper_get_anim(_sprite){
+    return animset[$ _sprite]
 }

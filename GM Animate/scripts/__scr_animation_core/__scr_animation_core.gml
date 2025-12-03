@@ -42,8 +42,8 @@ function __animation(_sprite, _loop = true) constructor {
 	loop = _loop;
 	paused = false;
 	effect_pause = false;
-	use_animset = false;
-	animset_get_sprite = undefined;
+	use_mapper = false;
+	mapper_get_sprite = method(creator, default_sprite_mapper_get_sprite);
 	
 	finished = false;
 	new_frame = -1;
