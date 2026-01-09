@@ -124,7 +124,7 @@ run.step = function() {
 jump = new create_state();
 jump.enter = function() {
 	animation_change(sprKnight_Jump_Up_Bow, 0, false);
-	animation_queue_add(sprKnight_Jump_Airborne_Bow, true);
+	animation_queue_add(sprKnight_Jump_Airborne_Bow, false,true);
 	animation_effect_squash_and_strech(30, 0.4, false, animation_curve_bounce_twice, true);
 	vsp = -jump_speed;
 }

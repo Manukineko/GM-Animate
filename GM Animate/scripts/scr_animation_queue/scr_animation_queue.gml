@@ -2,10 +2,16 @@
 /// @param {asset.GMSprite} _sprite The sprite to add to the queue.
 /// @param {Bool} _loop Whether the queued animation should loop when it finishes. Note: if there are more animations queued after this one,
 /// then this argument won't make a difference.
+/// @param {Bool|Undefined} _use_mapper activate or deactivate the mapper callback temporarly. It overrides, without changing, the global value set for the animations struct.
 /// @param {Real} _track The track to queue the animation for.
-function animation_queue_add(_sprite, _loop = true, _track = 0) {
+function animation_queue_add(_sprite, _loop = true, _use_mapper = undefined, _track = 0) {
 	__animation_error_checks
 	
+    _use_mapper = is_undefined(_use_mapper) ? animations[_track].use_mapper : _use_mapper;
+    if _use_mapper{
+        _sprite = animations[_track].mapper_get_sprite(_sprite);
+    }
+    
 	array_push(animations[_track].queue, {
 		sprite_index : _sprite,
 		loop : _loop
@@ -17,12 +23,18 @@ function animation_queue_add(_sprite, _loop = true, _track = 0) {
 /// @param {Real} _index The position in the queue to insert the animation into.
 /// @param {Bool} _loop Whether the queued animation should loop when it finishes. Note: if there are more animations queued after this one,
 /// then this argument won't make a difference.
+/// @param {Bool|Undefined} _use_mapper activate or deactivate the mapper callback temporarly. It overrides, without changing, the global value set for the animations struct.
 /// @param {Real} _track The track to queue the animation for.
-function animation_queue_insert(_sprite, _index, _loop = true, _track = 0) {
+function animation_queue_insert(_sprite, _index, _loop = true, _use_mapper = undefined, _track = 0) {
 	__animation_error_checks
+    
+    _use_mapper = is_undefined(_use_mapper) ? animations[_track].use_mapper : _use_mapper;
+    if _use_mapper{
+        _sprite = animations[_track].mapper_get_sprite(_sprite);
+    }
 	
 	if _index > array_length(animations[_track].queue) {
-		animation_queue_add(_sprite, _loop, _track);
+		animation_queue_add(_sprite, _loop, _use_mapper, _track);
 		return;
 	}
 	array_insert(animations[_track].queue, _index, {
@@ -57,9 +69,15 @@ function animation_queue_remove_index(_index, _track = 0) {
 
 /// @desc Removes a sprite from the queue. If the sprite has been queued multiple times, all of them will be removed.
 /// @param {asset.GMSprite} _sprite The sprite to remove.
+/// @param {Bool|Undefined} _use_mapper activate or deactivate the mapper callback temporarly. It overrides, without changing, the global value set for the animations struct.
 /// @param {Real} _track The track of the queue to remove from.
-function animation_queue_remove_sprite(_sprite, _track = 0) {
+function animation_queue_remove_sprite(_sprite, _use_mapper = undefined, _track = 0) {
 	__animation_error_checks
+    
+    _use_mapper = is_undefined(_use_mapper) ? animations[_track].use_mapper : _use_mapper;
+    if _use_mapper{
+        _sprite = animations[_track].mapper_get_sprite(_sprite);
+    }
 	
 	var _queue = animations[_track].queue;
 	for (var i = array_length(queue) - 1; i > -1; i--) {
@@ -93,10 +111,16 @@ function animation_queue_get(_track = 0) {
 
 /// @desc Returns the first position in the queue that the specified sprite is at. Returns -1 if the sprite is not present in the queue.
 /// @param {asset.GMSprite} _sprite The sprite to check for.
+/// @param {Bool|Undefined} _use_mapper activate or deactivate the mapper callback temporarly. It overrides, without changing, the global value set for the animations struct.
 /// @param {Real} _track The track of the queue to check.
 /// @return {Real} The index the specified sprite is present in, or -1 if the sprite is not present.
-function animation_queue_get_index(_sprite, _track = 0) {
+function animation_queue_get_index(_sprite, _use_mapper = undefined, _track = 0) {
 	__animation_error_checks
+    
+    _use_mapper = is_undefined(_use_mapper) ? animations[_track].use_mapper : _use_mapper;
+    if _use_mapper{
+        _sprite = animations[_track].mapper_get_sprite(_sprite);
+    }
 	
 	var _queue = animations[_track].queue;
 	for (var i = 0, _len = array_length(_queue); i < _len; ++i) {
@@ -109,10 +133,16 @@ function animation_queue_get_index(_sprite, _track = 0) {
 
 /// @desc Returns an array of all positions in the queue that the specified sprite is at. Returns -1 if the sprite is not present in the queue.
 /// @param {asset.GMSprite} _sprite The sprite to check for.
+/// @param {Bool|Undefined} _use_mapper activate or deactivate the mapper callback temporarly. It overrides, without changing, the global value set for the animations struct.
 /// @param {Real} _track The track of the queue to check.
 /// @return {Array<Real>} An array of all indexes the sprite is present in.
-function animation_queue_get_all_indexes(_sprite, _track = 0) {
+function animation_queue_get_all_indexes(_sprite, _use_mapper = undefined, _track = 0) {
 	__animation_error_checks
+    
+    _use_mapper = is_undefined(_use_mapper) ? animations[_track].use_mapper : _use_mapper;
+    if _use_mapper{
+        _sprite = animations[_track].mapper_get_sprite(_sprite);
+    }
 	
 	var _positions = [];
 	var _queue = animations[_track].queue;
