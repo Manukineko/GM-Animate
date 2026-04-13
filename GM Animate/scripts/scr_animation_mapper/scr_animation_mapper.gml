@@ -18,17 +18,8 @@ function animation_set_sprite_mapper(_sprite_mapper_callback, _scope = self, _tr
 	animations[_track].mapper_get_sprite = method(_scope, _sprite_mapper_callback);
 }
 
-// function __animation_resolver_error(_track){
-// 	if is_undefined(animations[_track].mapper_get_sprite){
-// 		show_error($"GM Animate - The resolver function is undefined for track {_track}\nYou need to define it with `animation_animset_bind` first.", true);
-// 	}
-// }
-
-
 // Customize it !
 function default_sprite_mapper_get_anim(_sprite){
     if !is_string(_sprite) return _sprite
 	return animlist[$ _sprite];
-    return animset[$ _sprite]
-    
 }
