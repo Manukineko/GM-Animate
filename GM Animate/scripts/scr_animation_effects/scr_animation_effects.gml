@@ -29,19 +29,20 @@ function animation_effect_shake(_duration, _intensity, _track = 0) {
 /// in the asset browser for some curves you can use, or make your own using the same format as the included ones. 
 /// @param {Bool} _reverse_xy Reverses the x and y tracks in the animation curve. If set to true, the x track will be applied to image_yscale
 /// and the y track applied to image_xscale.
+/// @param {Function} _on_finish the callback to call when the effect ended. default to `undefined`
 /// @param {Real} _track The track to apply the effect to. Pass `all` to apply the effect to all tracks at once.
-function animation_effect_squash_and_strech(_duration, _scale, _loop_count = 1, _curve = animation_curve_bounce_thrice, _reverse_xy = false, _track = 0) {
+function animation_effect_squash_and_strech(_duration, _scale, _loop_count = 1, _curve = animation_curve_bounce_thrice, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
 		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
 		   	if animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, i));
+			array_push(animations[i].effects, new __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, , _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, _track));
+	array_push(animations[_track].effects, new __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 /// @desc Starts a pulse for the specified track. 
@@ -54,19 +55,20 @@ function animation_effect_squash_and_strech(_duration, _scale, _loop_count = 1, 
 /// @param {Asset.GMAnimCurve} _curve The animation curve asset to base the pulse on. See the Animation Curves folder inside the Animation folder
 /// in the asset browser for some curves you can use, or make your own using the same format as the included ones. 
 /// @param {Bool} _reverse_xy Reverses the x and y tracks in the animation curve. If set to true, y track of the animation curve will be used instead of the x track.
+/// @param {Function} _on_finish the callback to call when the effect ended. default to `undefined`
 /// @param {Real} _track The track to apply the effect to. Pass `all` to apply the effect to all tracks at once.
-function animation_effect_pulse(_duration, _scale, _loop_count = 1, _curve = animation_curve_bounce_once, _reverse_xy = false, _track = 0) {
+function animation_effect_pulse(_duration, _scale, _loop_count = 1, _curve = animation_curve_bounce_once, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
 		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
 		    if animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, i));
+			array_push(animations[i].effects, new __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, _track));
+	array_push(animations[_track].effects, new __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 /// @desc Starts a sway effect for the specified track. 
@@ -80,19 +82,20 @@ function animation_effect_pulse(_duration, _scale, _loop_count = 1, _curve = ani
 /// in the asset browser for some curves you can use, or make your own using the same format as the included ones. 
 /// Only the "x" channel is used by this effect.
 /// @param {Bool} _reverse_xy Reverses the x and y tracks in the animation curve. If set to true, the "y" channel will be used instead of the "x" channel.
+/// @param {Function} _on_finish the callback to call when the effect ended. default to `undefined`
 /// @param {Real} _track The track to apply the effect to. Pass `all` to apply the effect to all tracks at once.
-function animation_effect_sway(_duration, _range, _x_offset = 0, _y_offset = 0, _loop_count = 1, _curve = animation_curve_wave, _reverse_xy = false, _track = 0) {
+function animation_effect_sway(_duration, _range, _x_offset = 0, _y_offset = 0, _loop_count = 1, _curve = animation_curve_wave, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
 		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
 		    if animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, i));
+			array_push(animations[i].effects, new __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, _track));
+	array_push(animations[_track].effects, new __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 /// @desc Starts an oscillate effect for the specified track. 
@@ -104,19 +107,20 @@ function animation_effect_sway(_duration, _range, _x_offset = 0, _y_offset = 0, 
 /// in the asset browser for some curves you can use, or make your own using the same format as the included ones. 
 /// Only the "x" channel is used by this effect.
 /// @param {Bool} _reverse_xy Reverses the x and y tracks in the animation curve. If set to true, the "y" channel will be used instead of the "x" channel.
+/// @param {Function} _on_finish the callback to call when the effect ended. default to `undefined`
 /// @param {Real} _track The track to apply the effect to. Pass `all` to apply the effect to all tracks at once.
-function animation_effect_oscillate(_duration, _range, _direction = 90, _loop_count = 1, _curve = animation_curve_wave, _reverse_xy = false, _track = 0) {
+function animation_effect_oscillate(_duration, _range, _direction = 90, _loop_count = 1, _curve = animation_curve_wave, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
 		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
 		    if animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, i));
+			array_push(animations[i].effects, new __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, _track));
+	array_push(animations[_track].effects, new __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 /// @desc Starts a blink effect for the specified track. 
@@ -127,19 +131,20 @@ function animation_effect_oscillate(_duration, _range, _direction = 90, _loop_co
 /// in the asset browser for some curves you can use, or make your own using the same format as the included ones. 
 /// Only the "x" channel is used by this effect.
 /// @param {Bool} _reverse_xy Reverses the x and y tracks in the animation curve. If set to true, the "y" channel will be used instead of the "x" channel.
+/// @param {Function} _on_finish the callback to call when the effect ended. default to `undefined`
 /// @param {Real} _track The track to apply the effect to. Pass `all` to apply the effect to all tracks at once.
-function animation_effect_blink(_duration, _alpha_range, _loop_count = 1, _curve = animation_curve_wave, _reverse_xy = false, _track = 0) {
+function animation_effect_blink(_duration, _alpha_range, _loop_count = 1, _curve = animation_curve_wave, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
 		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
 		    if animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, i));
+			array_push(animations[i].effects, new __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, _track));
+	array_push(animations[_track].effects, new __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 

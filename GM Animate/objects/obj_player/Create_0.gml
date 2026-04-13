@@ -125,7 +125,10 @@ jump = new create_state();
 jump.enter = function() {
 	animation_change(sprKnight_Jump_Up_Bow, 0, false);
 	animation_queue_add(sprKnight_Jump_Airborne_Bow, false,true);
-	animation_effect_squash_and_strech(30, 0.4, false, animation_curve_bounce_twice, true);
+	animation_effect_squash_and_strech(30, 0.4, false, animation_curve_bounce_twice, true, function(){
+		show_debug_message("Jumped")
+		animation_effect_blink(60,0.5)
+	});
 	vsp = -jump_speed;
 }
 jump.step = function() {

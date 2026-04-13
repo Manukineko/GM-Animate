@@ -30,6 +30,9 @@ function __animation_effect() constructor {
 		
 		if curve_progress > 1 {
 			if loop_count <= 1 {
+				if !is_undefined(on_finish){
+					on_finish()
+				}
 				var _index = __animation_effect_get_index();
 				array_delete(owner.animations[track].effects, _index, 1);
 				return;
@@ -62,11 +65,12 @@ function __animation_effect_shake(_duration, _intensity, _track = 0) : __animati
 	}
 }
 
-function __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, _track = 0) : __animation_effect() constructor {
+function __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration;
 	scale = _scale;
 	loop_count = _loop_count;
 	curve = _curve;
+	on_finish = _on_finish
 	track = _track;
 	name = "squash_and_stretch";
 	
@@ -84,11 +88,12 @@ function __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _
 	}
 }
 
-function __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, _track = 0) : __animation_effect() constructor {
+function __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration;
 	scale = _scale;
 	loop_count = _loop_count;
 	curve = _curve;
+	on_finish = _on_finish
 	track = _track;
 	name = "pulse";
 	
@@ -105,13 +110,14 @@ function __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _rever
 	}
 }
 
-function __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, _track = 0) : __animation_effect() constructor {
+function __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration;
 	range = _range;
 	x_offset = _x_offset;
 	y_offset = _y_offset;
 	loop_count = _loop_count;
 	curve = _curve;
+	on_finish = _on_finish
 	track = _track;
 	name = "sway";
 	
@@ -138,12 +144,13 @@ function __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_
 	}
 }
 
-function __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, _track = 0) : __animation_effect() constructor {
+function __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration;
 	curve = _curve;
 	range = _range;
 	direction = _direction;
 	loop_count = _loop_count;
+	on_finish = _on_finish
 	track = _track;
 	name = "oscillate";
 	
@@ -161,12 +168,13 @@ function __animation_effect_oscillate(_duration, _range, _direction, _loop_count
 	}
 }
 
-function __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, _track = 0) : __animation_effect() constructor {
+function __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration;
 	alpha_range = _alpha_range;
 	loop_count = _loop_count;
 	curve = _curve;
 	reverse_xy = _reverse_xy;
+	on_finish = _on_finish
 	track = _track;
 	name = "blink";
 	
