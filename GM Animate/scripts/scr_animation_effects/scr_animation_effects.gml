@@ -166,6 +166,66 @@ function animation_effect_hitstop(_duration, _track = 0) {
 	array_push(animations[_track].effects, new __animation_effect_hitstop(_duration, _track));
 }
 
+/// @desc Starts a colorize effect for the specified track.
+/// @param {Real} _duration How long the transition should last, in steps/game frames. If loop_count is greater than 1, this will be the duration of each loop.
+/// @param {Real} _color The color to apply
+/// @param {Real} _intensity the max intensity to reach where `1` is the full intensity and `0` no intensity (the color won't be visible).
+/// @param {Bool} _reset If the color has to be reset at the effect completion
+/// @param {Bool} _from_color By default the effect colorize `to` the color from the current color. If set to true, the effect colorizes `from` the color to the current color.
+/// @param {Function} _on_finish the callback to call when the effect ended. default to `undefined`
+/// @param {Real} _track The track to apply the effect to. Pass `all` to apply the effect to all tracks at once.
+function animation_effect_color_blender(_duration, _color, _intensity = 1, _reset = true, _from_color = false, _on_finish = undefined, _track = 0){
+	__animation_error_checks
+	if _track == all {
+		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
+		    if animations[i] == 0 {
+				continue;
+			}
+			array_push(animations[i].effects, new __animation_effect_color_blender(_duration, _color, _intensity, _reset, _from_color, _on_finish, i));
+		}
+		return;
+	}
+	array_push(animations[_track].effects, new __animation_effect_color_blender(_duration, _color, _intensity, _reset, _from_color, _on_finish, _track));
+}
+
+/// @desc Starts a flash color effect for the specified track. 
+/// @param {Real} _duration How long the flash should last, in steps/game frames. If loop_count is greater than 1, this will be the duration of each loop.
+/// @param {Real} _color_start The starting color. `c_white` would clean the color
+/// @param {Real} _color_end The color to transition to. `c_white` would clean the color
+/// @param {Real} _loop_count How many times the effect should loop. Pass `infinity` to loop forever.
+/// @param {Asset.GMAnimCurve} _curve The animation curve asset to base the blink on. See the Animation Curves folder inside the Animation folder
+/// in the asset browser for some curves you can use, or make your own using the same format as the included ones. 
+/// Only the "x" channel is used by this effect.
+/// @param {Bool} _reverse_xy Reverses the x and y tracks in the animation curve. If set to true, the "y" channel will be used instead of the "x" channel.
+/// @param {Function} _on_finish the callback to call when the effect ended. default to `undefined`
+/// @param {Real} _track The track to apply the effect to. Pass `all` to apply the effect to all tracks at once.
+function animation_effect_colors_transition(_duration, _color_start, _color_end, _loop_count = 1, _curve = animation_curve_wave, _reverse_xy = false, _on_finish = undefined, _track = 0) {
+	__animation_error_checks
+	if _track == all {
+		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
+		    if animations[i] == 0 {
+				continue;
+			}
+			array_push(animations[i].effects, new __animation_effect_colors_transition(_duration, _color_start, _color_end, _loop_count, _curve, _reverse_xy, _on_finish, i));
+		}
+		return;
+	}
+	array_push(animations[_track].effects, new __animation_effect_colors_transition(_duration, _color_start, _color_end, _loop_count, _curve, _reverse_xy, _on_finish, _track));
+}
+
+function animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_count = 1, _curve = animation_curve_bounce_thrice, _reverse_xy = false, _on_finish = undefined, _track = 0) {
+	__animation_error_checks
+	if _track == all {
+		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
+		   	if animations[i] == 0 {
+				continue;
+			}
+			array_push(animations[i].effects, new __animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_count, _curve, _reverse_xy, , _on_finish, i));
+		}
+		return;
+	}
+	array_push(animations[_track].effects, new __animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_count, _curve, _reverse_xy, _on_finish, _track));
+}
 
 /// @desc Counts how many instances of an effect are active on the specified track.
 /// @param {String} _effect_name The name of the effect to count, as a string. Effect names: "shake", "squash_and_stretch", "pulse", "sway", "oscillate", "hitstop"

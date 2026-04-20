@@ -71,18 +71,29 @@ function animation_change(_sprite, _starting_image_index = 0, _loop = true, _use
 /// @param {Real} _y y coordinate to draw at. Defaults to the instance's y.
 /// @param {Real} _track The track to draw. Pass `all` to draw every active track.
 function animation_draw(_x = x, _y = y, _track = 0) {
-	__animation_error_checks
+	__animation_error_checks;
 	
 	if _track == all {
 		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
 			if animations[i] == 0 {
 				continue;
 			}
+			// var count = array_length(animations[i].shaders)
+			// if _count > 0{
+			// 	var _shader_effect = animations[i].shaders[_count - 1]
+			// 	shader_set(_shader_effect.shader)
+			// 	_shader_effect.set()
+				
+			// }
+			animations[i].__animation_shader_set();
 			animations[i].__draw(_x, _y);
+			shader_reset();
 		}
 		return;
-	}		
+	}
+	animations[_track].__animation_shader_set();
 	animations[_track].__draw(_x, _y);
+	shader_reset();
 }
 
 /// @desc Draw an animation with different parameters than it's current variables, similar to draw_sprite_ext. Should always be called in a draw related event.
