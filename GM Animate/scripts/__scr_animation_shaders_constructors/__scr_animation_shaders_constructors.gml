@@ -17,16 +17,17 @@ function __shader_effect() constructor{
 	static step = undefined
 }
 
-function __animation_shader_flash(_label, _duration, _color, _shader, _priority, _mix, _on_finish, _remove, _track = 0) : __shader_effect() constructor {
+function __animation_shader_flash(_label, _duration, _color, _mix, _priority, _on_finish, _remove, _track = 0) : __shader_effect() constructor {
+	name		= "flash";
+	shader		= sh_animation_flash;
+	
+	label		= _label;
 	duration	= _duration;
 	color		= _color;
-	shader		= _shader;
 	priority	= _priority;
 	on_finish	= _on_finish;
 	remove		= _remove;
 	track		= _track;
-	name		= "flash";
-	label		= _label;
 	
 	//uniforms
 	u_color = shader_get_uniform(shader, "u_color");

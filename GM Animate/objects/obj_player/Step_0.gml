@@ -23,18 +23,18 @@ if key_test{
 if key_test2{
 	//animation_effect_color_blender(60, $98ff76, 0.3, true)
 	animation_effect_cancel("scaler")
-	animation_shader_flash("flash_white", 5, c_white, shd_flash, 10, 0)
+	animation_shader_flash("flash_white", 5, c_white, 0, 10)
 	animation_effect_flash_scale(120, 2, 2, , ac_animation_back_out, , function(){
-		animation_shader_flash("flash_white", 10, c_white, shd_flash, 10, -1 , , true)
+		animation_shader_flash("flash_white", 10, c_white, -1, 10, , true)
 	})
 	//animation_effect_color_transition(60, c_white, c_red, , ac_animation_back_out)
 	//animation_effect_blink(600, 1, , animation_curve_bounce_a_lot)
 }
 if key_shader1{
-	animation_shader_flash("flash_white", 60, c_white, shd_flash, 10, 0.5 , , true)
+	animation_shader_flash("flash_white", 60, c_white, 0.5, 10, , true)
 }
 if key_shader2{
-	animation_shader_flash("flash_red", 30, c_red, shd_flash, 11, 0 , , true)
+	animation_shader_flash("flash_red", 30, c_red, 0, 11 , , true)
 }
 if key_shader_remove{
 	animation_shader_cancel("flash")

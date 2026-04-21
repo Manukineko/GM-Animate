@@ -42,8 +42,8 @@ function __animation(_sprite, _loop = true, _use_mapper = false, _sprite_mapper_
 	loop = _loop;
 	paused = false;
 	effect_pause = false;
-	use_mapper = false;
-	mapper_get_sprite = method(creator, default_sprite_mapper_get_anim);
+	use_mapper = _use_mapper;
+	mapper_get_sprite = method(creator, _sprite_mapper_callback);
 	
 	finished = false;
 	new_frame = -1;
