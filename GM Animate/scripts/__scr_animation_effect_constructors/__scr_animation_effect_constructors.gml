@@ -30,6 +30,9 @@ function __animation_effect() constructor {
 		
 		if curve_progress > 1 {
 			if loop_count <= 1 {
+				if !is_undefined(on_finish){
+					on_finish()
+				}
 				var _index = __animation_effect_get_index();
 				array_delete(owner.animations[track].effects, _index, 1);
 				return;
@@ -42,9 +45,10 @@ function __animation_effect() constructor {
 	}
 }
 
-function __animation_effect_shake(_duration, _intensity, _track = 0) : __animation_effect() constructor {	
+function __animation_effect_shake(_duration, _intensity, _on_finish, _track = 0) : __animation_effect() constructor {	
 	duration = _duration;
 	intensity = _intensity;
+	on_finish = _on_finish
 	track = _track;
 	name = "shake";
 	
@@ -52,6 +56,9 @@ function __animation_effect_shake(_duration, _intensity, _track = 0) : __animati
 		if duration <= 0 {
 			var _index = __animation_effect_get_index();
 			array_delete(owner.animations[track].effects, _index, 1);
+			if !is_undefined(on_finish){
+				on_finish()
+			}
 			return;
 		}
 		duration -= 1;
@@ -62,11 +69,12 @@ function __animation_effect_shake(_duration, _intensity, _track = 0) : __animati
 	}
 }
 
-function __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, _track = 0) : __animation_effect() constructor {
+function __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration;
 	scale = _scale;
 	loop_count = _loop_count;
 	curve = _curve;
+	on_finish = _on_finish
 	track = _track;
 	name = "squash_and_stretch";
 	
@@ -84,11 +92,12 @@ function __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _
 	}
 }
 
-function __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, _track = 0) : __animation_effect() constructor {
+function __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration;
 	scale = _scale;
 	loop_count = _loop_count;
 	curve = _curve;
+	on_finish = _on_finish
 	track = _track;
 	name = "pulse";
 	
@@ -105,13 +114,14 @@ function __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _rever
 	}
 }
 
-function __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, _track = 0) : __animation_effect() constructor {
+function __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration;
 	range = _range;
 	x_offset = _x_offset;
 	y_offset = _y_offset;
 	loop_count = _loop_count;
 	curve = _curve;
+	on_finish = _on_finish
 	track = _track;
 	name = "sway";
 	
@@ -138,12 +148,13 @@ function __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_
 	}
 }
 
-function __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, _track = 0) : __animation_effect() constructor {
+function __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration;
 	curve = _curve;
 	range = _range;
 	direction = _direction;
 	loop_count = _loop_count;
+	on_finish = _on_finish
 	track = _track;
 	name = "oscillate";
 	
@@ -161,12 +172,13 @@ function __animation_effect_oscillate(_duration, _range, _direction, _loop_count
 	}
 }
 
-function __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, _track = 0) : __animation_effect() constructor {
+function __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration;
 	alpha_range = _alpha_range;
 	loop_count = _loop_count;
 	curve = _curve;
 	reverse_xy = _reverse_xy;
+	on_finish = _on_finish
 	track = _track;
 	name = "blink";
 	
@@ -183,8 +195,9 @@ function __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, 
 	}
 }
 
-function __animation_effect_hitstop(_duration, _track = 0) : __animation_effect() constructor {
+function __animation_effect_hitstop(_duration, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration;
+	on_finish = _on_finish
 	track = _track;
 	name = "hitstop";
 	
@@ -193,9 +206,95 @@ function __animation_effect_hitstop(_duration, _track = 0) : __animation_effect(
 			var _index = __animation_effect_get_index();
 			owner.animations[track].effect_pause = false;
 			array_delete(owner.animations[track].effects, _index, 1);
+			if !is_undefined(on_finish){
+				on_finish()
+			}
 			return;	
 		}
 		duration -= 1;
 		owner.animations[track].effect_pause = true;
+	}
+}
+
+function __animation_effect_color_blender(_duration, _color, _intensity, _reset, _from_color, _on_finish, _track = 0) : __animation_effect() constructor {
+	duration = _duration
+	reset = _reset
+	on_finish = _on_finish
+	track = _track
+	name = "color_blender"
+	rate = _intensity/duration
+	amount = 0
+	
+	if _from_color{
+		color_start = _color
+		color_end = owner.animations[track].image_blend
+	}
+	else{
+		color_start = owner.animations[track].image_blend
+		color_end = _color
+	}
+	
+	static step = function() {
+		if duration <= 0{
+			var _index = __animation_effect_get_index();
+			array_delete(owner.animations[track].effects, _index, 1);
+			if reset owner.animations[track].image_blend = color_start
+			if !is_undefined(on_finish){
+				on_finish()
+			}
+			return;
+		}
+		duration -= 1
+		amount += rate
+		owner.animations[track].image_blend = merge_colour(color_start, color_end, amount)
+	}
+}
+
+function __animation_effect_colors_transition(_duration, _color_start, _color_end, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
+	duration = _duration;
+	color_start = _color_start
+	color_end = _color_end
+	loop_count = _loop_count;
+	curve = _curve;
+	reverse_xy = _reverse_xy;
+	on_finish = _on_finish
+	track = _track;
+	name = "colors_transition";
+	
+	__animation_channel_setup(_reverse_xy);
+	
+	static step = function() {
+		__animation_progress_curve();
+		
+		var _x_prog = animcurve_channel_evaluate(x_channel, curve_progress);
+		_x_prog = clamp(_x_prog, 0, 1)
+		
+		var _anim = owner.animations[track];
+		 var _color = merge_colour(color_start, color_end, abs(_x_prog))
+		_anim.image_blend = _color
+
+	}
+}
+function __animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
+	duration = _duration;
+	scale_x = _scale_x;
+	scale_y = _scale_y
+	loop_count = _loop_count;
+	curve = _curve;
+	on_finish = _on_finish
+	track = _track;
+	name = "flash_scale";
+	
+	__animation_channel_setup(_reverse_xy);
+	
+	static step = function() {
+		__animation_progress_curve();
+		
+		var _x_prog = animcurve_channel_evaluate(x_channel, curve_progress);
+		var _y_prog = animcurve_channel_evaluate(y_channel, curve_progress);
+		
+		var _anim = owner.animations[track];
+		_anim.image_xscale = lerp(scale_x, 1, _x_prog);
+		_anim.image_yscale = lerp(scale_y, 1, _y_prog);
 	}
 }

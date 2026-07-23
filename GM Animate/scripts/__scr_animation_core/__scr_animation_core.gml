@@ -42,8 +42,8 @@ function __animation(_sprite, _loop = true, _use_mapper = false, _sprite_mapper_
 	loop = _loop;
 	paused = false;
 	effect_pause = false;
-	use_mapper = false;
-	mapper_get_sprite = method(creator, default_sprite_mapper_get_anim);
+	use_mapper = _use_mapper;
+	mapper_get_sprite = method(creator, _sprite_mapper_callback);
 	
 	finished = false;
 	new_frame = -1;
@@ -60,6 +60,7 @@ function __animation(_sprite, _loop = true, _use_mapper = false, _sprite_mapper_
 	__reset_offsets();
 	
 	effects = [];
+	shaders = [];
 	queue = [];
 	events = {};
 	
@@ -130,6 +131,12 @@ function __animation(_sprite, _loop = true, _use_mapper = false, _sprite_mapper_
 		for (var j = array_length(effects) - 1; j > -1; j--;) {
 			effects[j].step();
 		}
+		// we want the shader's variables to be updated regarding the priority.
+		for (var k = array_length(shaders) - 1; k > -1; k--;) {
+			if !is_undefined(shaders[k].step){
+				shaders[k].step();
+			};
+		}
 		if finished and array_length(queue) > 0 {
 			var _queue_data = queue[0];
 			array_delete(queue, 0, 1);
@@ -150,6 +157,15 @@ function __animation(_sprite, _loop = true, _use_mapper = false, _sprite_mapper_
 		else {
 			events = [];	
 		}
+	}
+	
+	static __animation_shader_set = function(){
+		var _count = array_length(shaders);
+			if _count > 0{
+				var _shader_effect = shaders[_count - 1];
+				shader_set(_shader_effect.shader);
+				_shader_effect.set();
+			}
 	}
 	
 	static __draw = function(_x = other.x, _y = other.y) {

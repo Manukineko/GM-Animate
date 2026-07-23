@@ -3,6 +3,10 @@ hor_input = 0;
 key_run = false;
 key_jump = false;
 key_attack = false;
+key_test = false;
+key_test2= false;
+key_shader1 = false;
+key_shader2 = false;
 
 hsp = 0;
 vsp = 0;
@@ -15,6 +19,8 @@ animlist = {
 	idle_bow:sprKnight_Idle_Bow,
 	walk_bow:sprKnight_Walk_Bow
 }
+
+var _value = lerp(2,1,0.5)
 
 collision_and_move = function() {
 	if place_meeting(x + hsp, y, obj_wall) {
