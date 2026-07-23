@@ -209,6 +209,17 @@ function animation_finished_on(_sprite = undefined, _track = 0) {
     return false;
 }
 
+/// @desc Checks if an animation is currently on the last frame. Can return true multiple steps in a row.
+/// @param {Real} _track The track to check.
+/// @return {Bool} Whether the animation is on the last frame or not
+function animation_on_last_frame(_frame, _track = 0) {
+	__animation_error_checks;
+	
+	if floor(animations[_track].image_index) == floor(animations[_track].image_number - 1) {
+		return true;	
+	}
+}
+
 /// @desc Checks if an animation is currently on the specified frame. Can return true multiple steps in a row.
 /// @param {Real|Array<Real>} _frame The frame to check, or an array of frames to check.
 /// @param {Real} _track The track to check.
