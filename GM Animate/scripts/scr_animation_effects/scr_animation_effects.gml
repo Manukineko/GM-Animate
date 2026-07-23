@@ -226,6 +226,19 @@ function animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_count
 	}
 	array_push(animations[_track].effects, new __animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
+function animation_effect_scale(_duration, _scale_x_start, _scale_y_start, _scale_x_end, _scale_y_end, _loop_count = 1, _curve = animation_curve_bounce_thrice, _reverse_xy = false, _on_finish = undefined, _track = 0) {
+	__animation_error_checks
+	if _track == all {
+		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
+		   	if animations[i] == 0 {
+				continue;
+			}
+			array_push(animations[i].effects, new __animation_effect_scale(_duration, _scale_x_start, _scale_y_start, _scale_x_end, _scale_y_end, _loop_count, _curve, _reverse_xy, , _on_finish, i));
+		}
+		return;
+	}
+	array_push(animations[_track].effects, new __animation_effect_scale(_duration, _scale_x_start, _scale_y_start, _scale_x_end, _scale_y_end, _loop_count, _curve, _reverse_xy, _on_finish, _track));
+}
 
 /// @desc Counts how many instances of an effect are active on the specified track.
 /// @param {String} _effect_name The name of the effect to count, as a string. Effect names: "shake", "squash_and_stretch", "pulse", "sway", "oscillate", "hitstop"

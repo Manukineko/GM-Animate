@@ -298,3 +298,28 @@ function __animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_cou
 		_anim.image_yscale = lerp(scale_y, 1, _y_prog);
 	}
 }
+function __animation_effect_scale(_duration, _scale_x_start, _scale_y_start, _scale_x_end, _scale_y_end, _loop_count, _curve, _reverse_xy, _on_finish, _track = 0) : __animation_effect() constructor {
+	duration = _duration;
+	scale_x_start = _scale_x_start;
+	scale_y_start = _scale_y_start;
+	scale_x_end = _scale_x_end;
+	scale_y_end = _scale_y_end
+	loop_count = _loop_count;
+	curve = _curve;
+	on_finish = _on_finish
+	track = _track;
+	name = "scale";
+	
+	__animation_channel_setup(_reverse_xy);
+	
+	static step = function() {
+		__animation_progress_curve();
+		
+		var _x_prog = animcurve_channel_evaluate(x_channel, curve_progress);
+		var _y_prog = animcurve_channel_evaluate(y_channel, curve_progress);
+		
+		var _anim = owner.animations[track];
+		_anim.image_xscale = lerp(scale_x_start, scale_x_end, _x_prog);
+		_anim.image_yscale = lerp(scale_y_start, scale_y_end, _y_prog);
+	}
+}
