@@ -1,0 +1,11 @@
+{
+  "$GMNotes":"v1",
+  "%Name":"TODO",
+  "name":"TODO",
+  "parent":{
+    "name":"Note",
+    "path":"folders/Auto-Curve/Note.yy",
+  },
+  "resourceType":"GMNotes",
+  "resourceVersion":"2.0",
+}

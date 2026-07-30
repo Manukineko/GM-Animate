@@ -2,7 +2,7 @@
 
 //GM Animate version: 0.3.2
 
-function __animation(_sprite, _loop = true, _use_mapper = false, _sprite_mapper_callback = default_sprite_mapper_get_anim) constructor {
+function __animation(_sprite, _loop = true, _mask_auto = false, _mask_auto_type = undefined, _mask_default = undefined) constructor {
 	static __animation_get_speed = function(_sprite = sprite_index) {
 		//TY Tabularelf for this function! I converted it from a ternary to an if/else cuz I can't read ternaries to save my life
 		var _sprite_speed;
@@ -42,8 +42,14 @@ function __animation(_sprite, _loop = true, _use_mapper = false, _sprite_mapper_
 	loop = _loop;
 	paused = false;
 	effect_pause = false;
-	use_mapper = _use_mapper;
-	mapper_get_sprite = method(creator, _sprite_mapper_callback);
+	
+	mask_index = -1
+	mask_auto		= _mask_auto
+	mask_auto_type 	= _mask_auto_type
+	mask_default 	= _mask_default
+	mask_is_overrided = false
+	
+	__init_mask_auto()
 	
 	finished = false;
 	new_frame = -1;
@@ -128,6 +134,7 @@ function __animation(_sprite, _loop = true, _use_mapper = false, _sprite_mapper_
 		}
 		
 		__reset_offsets();
+		
 		for (var j = array_length(effects) - 1; j > -1; j--;) {
 			effects[j].step();
 		}
@@ -146,7 +153,43 @@ function __animation(_sprite, _loop = true, _use_mapper = false, _sprite_mapper_
 			finished = false; // reset in order to trigger the finished flag on the queueed sprite
 			loop = _queue_data.loop;
 			__animation_variable_setup();
+			
+			//Mask change code
+			
 		}
+		
+	}
+	
+	static __init_mask_auto = function(){
+		
+		if mask_auto == true{
+			//we reset the mask to the relevente selected type for the track
+			if mask_auto_type == GMA_MASK.MASK_INDEX && (is_undefined(mask_default) || asset_get_type(mask_default) != asset_sprite){
+				show_error($"The Default Mask is not set for gma_animations{self} in {creator}", true)
+			}
+			if is_undefined(mask_auto_type) || !is_real(mask_auto_type){
+				show_error($"The Auto Mask Type is not set for gma_animations{self} in {creator}", true)
+			}
+			
+			switch(mask_auto_type){
+				//if type is INST_SPRITE we reset the instance mask_index to instance sprite
+				case GMA_MASK.INST_SPRITE:
+					mask_default = -1
+				break;
+				// if type is SAME_SPRITE we reset the instance mask_index to the new sprite
+				case GMA_MASK.SAME_SPRITE:
+					mask_default = sprite_index
+				break;
+				// if type is MASK_INDEX we reset the instance mask_index to the default track's mask index.
+				case GMA_MASK.MASK_INDEX:
+					mask_default = mask_default
+				break;
+			}
+			
+			mask_index = mask_default
+			creator.mask_index = mask_index
+		} 
+		
 	}
 	
 	static __animation_event_setup = function() {

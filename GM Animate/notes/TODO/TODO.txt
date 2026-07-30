@@ -1,0 +1,18 @@
+# TO-DO
+
+> - [x] **Remove the mapper system**  
+> The implementation is crap. It's better to have something external, like "GM-Spritinate", or GM-Farfadate (XD french play-on-word between Farfadet and Sprite)
+
+> - [ ] **Rename the `animations` variable to `gma_animations` in order to avoid clashing name**  
+>  "animations" is too generique and can be already in use by the user
+
+> - [ ] **Set the Mask management globally for the track**  
+> Allow to override the mask or set back to the default behaviour when calling `animation_change`  
+> 	- By default, it would assigned the `mask_index` of the calling instance to the sprite set by `animation_change`in order to mimic GM's behaviour', the user could set the collision mask parametters in the IDE.
+>	- Or they could set a default sprite as the `mask_index` either in `animation_start` or directly on the calling instance, in the IDE (however, the latter means all track would have the same collision mask by default.) 
+> 	- Then in `animation_change`, a parameter allow to override the `mask_index` with another sprite (or a bounding box with `sprite_set_bbox` ?). If this parameter is omitted and the `mask_index` has been previously overrided, then it will switched back to the default set with `animation_start`
+>	- **/!\ HOWEVER**  
+> the mask management must allow to be completly deactivated on a track, as the user don't necesserly need it AND it would lead to unexpected behaviour if both track try to set the `mask_index` XD
+
+> - [ ] **Attach Points**  
+> An attach point system built into GM animate, per sprite, with default value (x, y, angle, scale) and a `config` struc that allow arbitrary value to be retrieved (alpha, image, etc)

@@ -1,0 +1,24 @@
+# Mask Management
+
+*parameter*: `animation_create`
+
+Allow to automatically switch to a mask when changing sprite.
+
+## Internal
+
+**mask_overrided** [bool] - set when the `mask_override` parameter is set in `animation_change`
+
+## Public
+- **AUTO** [bool]
+> `false` : the actual behaviour of GM Animate. No mask change unless `animation_set_mask` is called.  
+
+> `true`: The mask management will set the mask index based on the type of management. It will also automatically assign the proper mask index, if it as been overrided by a previous call of `animation_change` 
+
+## Type
+*enum* : GMA_MASK
+
+If **AUTO** is `true`
+
+- **SAME_SPRITE** : the called sprite is used as the `mask_index` when `animation_change` is called.
+- **MASK_INDEX** : Set a sprite as the global mask index for the track. That's similar to the default GM Animate behaviour, but automatically revert to the default **MASK*
+	- **sprite_mask** : a sprite need to be set if using the type **MASK**
