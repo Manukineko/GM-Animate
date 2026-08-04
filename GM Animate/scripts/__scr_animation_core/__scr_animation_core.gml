@@ -47,7 +47,6 @@ function __animation(_sprite, _loop = true, _mask_auto = false, _mask_auto_type 
 	mask_auto		= _mask_auto
 	mask_auto_type 	= _mask_auto_type
 	mask_default 	= _mask_default
-	mask_is_overrided = false
 	
 	__init_mask_auto()
 	
@@ -148,6 +147,7 @@ function __animation(_sprite, _loop = true, _mask_auto = false, _mask_auto_type 
 			var _queue_data = queue[0];
 			array_delete(queue, 0, 1);
 			sprite_index = _queue_data.sprite_index;
+			mask_index = _queue_data.mask_index
 			image_index = 0;
 			image_speed = 1;
 			finished = false; // reset in order to trigger the finished flag on the queueed sprite
@@ -155,6 +155,27 @@ function __animation(_sprite, _loop = true, _mask_auto = false, _mask_auto_type 
 			__animation_variable_setup();
 			
 			//Mask change code
+			if !is_undefined(mask_index) && (asset_get_type(mask_index) == asset_sprite || mask_index == -1){
+				creator.mask_index = mask_index
+				return
+			}
+			if mask_auto == true{
+				//we reset the mask to the relevente selected type for the track
+				switch(mask_auto_type){
+					//if type is INST_SPRITE we reset the instance mask_index to instance sprite
+					case GMA_MASK.INST_SPRITE:
+						creator.mask_index = -1
+					break;
+					// if type is SAME_SPRITE we reset the instance mask_index to the new sprite
+					case GMA_MASK.SAME_SPRITE:
+						creator.mask_index = sprite_index
+					break;
+					// if type is MASK_INDEX we reset the instance mask_index to the default track's mask index.
+					case GMA_MASK.MASK_INDEX:
+						creator.mask_index = mask_default
+					break;
+				}
+			}
 			
 		}
 		
@@ -167,12 +188,12 @@ function __animation(_sprite, _loop = true, _mask_auto = false, _mask_auto_type 
 			if mask_auto_type == GMA_MASK.MASK_INDEX && (is_undefined(mask_default) || asset_get_type(mask_default) != asset_sprite){
 				show_error($"The Default Mask is not set for gma_animations{self} in {creator}", true)
 			}
-			if is_undefined(mask_auto_type) || !is_real(mask_auto_type){
+			if is_undefined(mask_auto_type) || !is_int64(mask_auto_type){
 				show_error($"The Auto Mask Type is not set for gma_animations{self} in {creator}", true)
 			}
 			
 			switch(mask_auto_type){
-				//if type is INST_SPRITE we reset the instance mask_index to instance sprite
+				//if type is INST_SPRITE we reset the instance mask_index to the same as theinstance sprite
 				case GMA_MASK.INST_SPRITE:
 					mask_default = -1
 				break;
@@ -180,7 +201,7 @@ function __animation(_sprite, _loop = true, _mask_auto = false, _mask_auto_type 
 				case GMA_MASK.SAME_SPRITE:
 					mask_default = sprite_index
 				break;
-				// if type is MASK_INDEX we reset the instance mask_index to the default track's mask index.
+				// if type is MASK_INDEX we reset the instance mask_index to the default amimation mask index.
 				case GMA_MASK.MASK_INDEX:
 					mask_default = mask_default
 				break;
@@ -226,7 +247,7 @@ function __animation(_sprite, _loop = true, _mask_auto = false, _mask_auto_type 
 }
 
 function __animation_track_error(_track) {
-	if _track != all and (_track > array_length(animations) - 1 or animations[_track] == 0 or _track < 0) {
+	if _track != all and (_track > array_length(gma_animations) - 1 or gma_animations[_track] == 0 or _track < 0) {
 		show_error("GM Animate: tried to access a track that does not exist on object " + object_get_name(object_index) + ", track " + string(_track) + ". \nMake sure the track is created first with animation_start() before using other functions on it.", true); 
 	}
 }
@@ -235,7 +256,7 @@ function __animation_array_error() {
 	if !instance_exists(self) {
 		show_error("GM Animate: tried to use an animation function in a non-instance scope. \nRunning animations in struct or global scope is currently not supported.", true);
 	}
-	if !variable_instance_exists(id, "animations") { 
+	if !variable_instance_exists(id, "gma_animations") { 
 		show_error("GM Animate: tried to use an animation function on an object that never called animation_start: " + object_get_name(object_index) + "\nCall animation_start() on the object before using other animation functions.", true);
 	} 
 }

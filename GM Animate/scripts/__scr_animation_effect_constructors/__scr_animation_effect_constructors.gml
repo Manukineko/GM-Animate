@@ -4,7 +4,7 @@ function __animation_effect() constructor {
 	owner = other.id;
 		
 	static __animation_effect_get_index = function() {
-		var _effect_array = owner.animations[track].effects;
+		var _effect_array = owner.gma_animations[track].effects;
 		for (var i = 0, _len = array_length(_effect_array); i < _len; ++i) {
 		    if _effect_array[i] == self {
 				return i;
@@ -34,7 +34,7 @@ function __animation_effect() constructor {
 					on_finish()
 				}
 				var _index = __animation_effect_get_index();
-				array_delete(owner.animations[track].effects, _index, 1);
+				array_delete(owner.gma_animations[track].effects, _index, 1);
 				return;
 			}
 			else {
@@ -55,7 +55,7 @@ function __animation_effect_shake(_duration, _intensity, _on_finish, _track = 0)
 	static step = function() {
 		if duration <= 0 {
 			var _index = __animation_effect_get_index();
-			array_delete(owner.animations[track].effects, _index, 1);
+			array_delete(owner.gma_animations[track].effects, _index, 1);
 			if !is_undefined(on_finish){
 				on_finish()
 			}
@@ -64,8 +64,8 @@ function __animation_effect_shake(_duration, _intensity, _on_finish, _track = 0)
 		duration -= 1;
 		var _len = random_range(intensity/3, intensity);
 		var _dir = random(360);
-		owner.animations[track].x_offset += lengthdir_x(_len, _dir);
-		owner.animations[track].y_offset += lengthdir_y(_len, _dir);
+		owner.gma_animations[track].x_offset += lengthdir_x(_len, _dir);
+		owner.gma_animations[track].y_offset += lengthdir_y(_len, _dir);
 	}
 }
 
@@ -86,7 +86,7 @@ function __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _
 		var _x_prog = animcurve_channel_evaluate(x_channel, curve_progress);
 		var _y_prog = animcurve_channel_evaluate(y_channel, curve_progress);
 		
-		var _anim = owner.animations[track];
+		var _anim = owner.gma_animations[track];
 		_anim.xscale_offset += lerp(0, scale, _x_prog);
 		_anim.yscale_offset += lerp(0, scale, _y_prog);
 	}
@@ -108,7 +108,7 @@ function __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _rever
 		
 		var _prog = animcurve_channel_evaluate(x_channel, curve_progress);
 		
-		var _anim = owner.animations[track];
+		var _anim = owner.gma_animations[track];
 		_anim.xscale_offset += lerp(0, scale, _prog);
 		_anim.yscale_offset += lerp(0, scale, _prog);
 	}
@@ -132,7 +132,7 @@ function __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_
 		
 		var _x_prog = animcurve_channel_evaluate(x_channel, curve_progress);		
 		
-		var _anim = owner.animations[track];
+		var _anim = owner.gma_animations[track];
 		var _angle = lerp(0, range, _x_prog);
 		_anim.angle_offset += _angle;
 		
@@ -165,7 +165,7 @@ function __animation_effect_oscillate(_duration, _range, _direction, _loop_count
 		
 		var _x_prog = animcurve_channel_evaluate(x_channel, curve_progress);
 		
-		var _anim = owner.animations[track];
+		var _anim = owner.gma_animations[track];
 		var _offset = lerp(0, range, _x_prog);
 		_anim.x_offset += lengthdir_x(_offset, direction);
 		_anim.y_offset += lengthdir_y(_offset, direction);
@@ -189,7 +189,7 @@ function __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, 
 		
 		var _x_prog = animcurve_channel_evaluate(x_channel, curve_progress);
 		
-		var _anim = owner.animations[track];
+		var _anim = owner.gma_animations[track];
 		var _offset = lerp(0, alpha_range, _x_prog);
 		_anim.alpha_offset += abs(_offset);
 	}
@@ -204,15 +204,15 @@ function __animation_effect_hitstop(_duration, _on_finish, _track = 0) : __anima
 	static step = function() {
 		if duration <= 0 {
 			var _index = __animation_effect_get_index();
-			owner.animations[track].effect_pause = false;
-			array_delete(owner.animations[track].effects, _index, 1);
+			owner.gma_animations[track].effect_pause = false;
+			array_delete(owner.gma_animations[track].effects, _index, 1);
 			if !is_undefined(on_finish){
 				on_finish()
 			}
 			return;	
 		}
 		duration -= 1;
-		owner.animations[track].effect_pause = true;
+		owner.gma_animations[track].effect_pause = true;
 	}
 }
 
@@ -227,18 +227,18 @@ function __animation_effect_color_blender(_duration, _color, _intensity, _reset,
 	
 	if _from_color{
 		color_start = _color
-		color_end = owner.animations[track].image_blend
+		color_end = owner.gma_animations[track].image_blend
 	}
 	else{
-		color_start = owner.animations[track].image_blend
+		color_start = owner.gma_animations[track].image_blend
 		color_end = _color
 	}
 	
 	static step = function() {
 		if duration <= 0{
 			var _index = __animation_effect_get_index();
-			array_delete(owner.animations[track].effects, _index, 1);
-			if reset owner.animations[track].image_blend = color_start
+			array_delete(owner.gma_animations[track].effects, _index, 1);
+			if reset owner.gma_animations[track].image_blend = color_start
 			if !is_undefined(on_finish){
 				on_finish()
 			}
@@ -246,7 +246,7 @@ function __animation_effect_color_blender(_duration, _color, _intensity, _reset,
 		}
 		duration -= 1
 		amount += rate
-		owner.animations[track].image_blend = merge_colour(color_start, color_end, amount)
+		owner.gma_animations[track].image_blend = merge_colour(color_start, color_end, amount)
 	}
 }
 
@@ -269,7 +269,7 @@ function __animation_effect_colors_transition(_duration, _color_start, _color_en
 		var _x_prog = animcurve_channel_evaluate(x_channel, curve_progress);
 		_x_prog = clamp(_x_prog, 0, 1)
 		
-		var _anim = owner.animations[track];
+		var _anim = owner.gma_animations[track];
 		 var _color = merge_colour(color_start, color_end, abs(_x_prog))
 		_anim.image_blend = _color
 
@@ -293,7 +293,7 @@ function __animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_cou
 		var _x_prog = animcurve_channel_evaluate(x_channel, curve_progress);
 		var _y_prog = animcurve_channel_evaluate(y_channel, curve_progress);
 		
-		var _anim = owner.animations[track];
+		var _anim = owner.gma_animations[track];
 		_anim.image_xscale = lerp(scale_x, 1, _x_prog);
 		_anim.image_yscale = lerp(scale_y, 1, _y_prog);
 	}
@@ -318,7 +318,7 @@ function __animation_effect_scale(_duration, _scale_x_start, _scale_y_start, _sc
 		var _x_prog = animcurve_channel_evaluate(x_channel, curve_progress);
 		var _y_prog = animcurve_channel_evaluate(y_channel, curve_progress);
 		
-		var _anim = owner.animations[track];
+		var _anim = owner.gma_animations[track];
 		_anim.image_xscale = lerp(scale_x_start, scale_x_end, _x_prog);
 		_anim.image_yscale = lerp(scale_y_start, scale_y_end, _y_prog);
 	}

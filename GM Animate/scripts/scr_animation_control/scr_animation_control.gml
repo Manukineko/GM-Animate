@@ -7,23 +7,25 @@
 /// @param {asset.GMSprite} _sprite The sprite asset to animate.
 /// @param {Bool} _loop Whether the animation should loop or not upon completion.
 /// @param {Real} _track The track to play the animation on.
-/// @param {Function} _sprite_mapper_callback the sprite mapper callback to use. 
+/// @param {bool} _mask_auto=false enable the auto-mask feature
+/// @param {Enum.GMA_MASK|undefined} _mask_auto_type Set how the mask_index will be define (SAME_SPRITE, INST_SPRITE or MASK_INDEX)
+/// @param {GMAsset.Sprite} _mask_sprite If the type is MASK_INDEX, set the default mask to use.
 /// @return {Struct} Animation struct
 function animation_start(_sprite, _loop = true, _track = 0, _mask_auto = false, _mask_auto_type = undefined, _mask_sprite = undefined) {
 	
- 	animations[_track] = new __animation(_sprite, _loop, _mask_auto, _mask_auto_type, _mask_sprite);
-	return animations[_track];
+ 	gma_animations[_track] = new __animation(_sprite, _loop, _mask_auto, _mask_auto_type, _mask_sprite);
+	return gma_animations[_track];
 }
 
 /// @desc Runs the animations for this object. Must be called in a step event for animations to work.
 function animation_run() {
 	__animation_array_error();
 		
-	for(var i = 0, _len = array_length(animations); i < _len; i++;) { 
-		if animations[i] == 0 {
+	for(var i = 0, _len = array_length(gma_animations); i < _len; i++;) { 
+		if gma_animations[i] == 0 {
 			continue;	
 		}
-		animations[i].__animate();
+		gma_animations[i].__animate();
 	}
 }
 
@@ -33,13 +35,14 @@ function animation_run() {
 /// @param {asset.GMSprite|String} _sprite The sprite asset or a string to animate.
 /// @param {Real} _starting_image_index The frame to start the new animation on. Pass -1 to not change image_index and keep the frame of the previous animation.
 /// @param {Bool} _loop Whether the animation should loop or not upon completion.
+/// @param {GMAsset.Sprite|Undefined|Real} _mask_override The mask_index to use for that sprite. Can be a Sprite or -1. If auto_mask is enable, it will revert to the mask defined by the mode set in `animation_start`
 /// @param {Real} _track The track to change the animation on.
 /// @return {Struct} Animation struct
 function animation_change(_sprite, _starting_image_index = 0, _loop = true, _mask_override = undefined, _track = 0) {
 	__animation_error_checks;
     
-    var _anim = animations[_track] //need that to access the instance variable when changing the `mask_index`
-	with _anim {
+    var _anim = gma_animations[_track] //need that to access the instance variable when changing the `mask_index`
+	with gma_animations[_track]{
 		
 		if sprite_index != _sprite {
 			sprite_index = _sprite;
@@ -53,44 +56,46 @@ function animation_change(_sprite, _starting_image_index = 0, _loop = true, _mas
 			image_speed = 1;
 		}
 		loop = _loop;
-	}
-	
-	//mask override code
-	_anim.mask_is_overrided = false
-	// whatever the mask_auto, if _mask_override is true, change the mask_index to the provided one.
-	if !is_undefined(_mask_override) && asset_get_type(_mask_override) == asset_sprite{
-		mask_index = _mask_override
-		_anim.mask_is_overrided = true
 		
-		return animations[_track];
-	}
+		mask_index = _mask_override
 	
-	// but if mask override is false we check mask_auto 
-	if _anim.mask_auto == true{
-		//we reset the mask to the relevente selected type for the track
-		switch(_anim.mask_auto_type){
-			//if type is INST_SPRITE we reset the instance mask_index to instance sprite
-			case GMA_MASK.INST_SPRITE:
-				mask_index = -1
-			break;
-			// if type is SAME_SPRITE we reset the instance mask_index to the new sprite
-			case GMA_MASK.SAME_SPRITE:
-				mask_index = _sprite
-			break;
-			// if type is MASK_INDEX we reset the instance mask_index to the default track's mask index.
-			case GMA_MASK.MASK_INDEX:
-				mask_index = _anim.mask_default
-			break;
+	
+		//mask override code
+		// whatever the mask_auto, if _mask_override is true, change the mask_index to the provided one.
+		if !is_undefined(mask_index) && (asset_get_type(mask_index) == asset_sprite || mask_index == -1){
+			creator.mask_index = mask_index
+			
+			return self;
 		}
-	}
-	//else{
-		//// if the mask_index has been overrided when amask_auto is off, we set it bask to -1 (same as instance sprite, set in the IDE)
-		//if mask_is_overrided == true{
-			//mask_index = -1
+		
+		// but if mask override is false we check mask_auto 
+		if mask_auto == true{
+			//we reset the mask to the relevente selected type for the track
+			switch(mask_auto_type){
+				//if type is INST_SPRITE we reset the instance mask_index to instance sprite
+				case GMA_MASK.INST_SPRITE:
+					mask_index = -1
+				break;
+				// if type is SAME_SPRITE we reset the instance mask_index to the new sprite
+				case GMA_MASK.SAME_SPRITE:
+					mask_index = sprite_index
+				break;
+				// if type is MASK_INDEX we reset the instance mask_index to the default track's mask index.
+				case GMA_MASK.MASK_INDEX:
+					mask_index = mask_default
+				break;
+			}
+			
+			creator.mask_index = mask_index
+		}
+		//else{
+			//// if the mask_index has been overrided when amask_auto is off, we set it bask to -1 (same as instance sprite, set in the IDE)
+			//if mask_is_overrided == true{
+				//mask_index = -1
+			//}
 		//}
-	//}
-	
-	return animations[_track];
+		}
+	return gma_animations[_track];
 }
 
 /// @desc Draw an animation. Must be called for an animation to appear. Should always be called in a draw related event.
@@ -101,25 +106,25 @@ function animation_draw(_x = x, _y = y, _track = 0) {
 	__animation_error_checks;
 	
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-			if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+			if gma_animations[i] == 0 {
 				continue;
 			}
-			// var count = array_length(animations[i].shaders)
+			// var count = array_length(gma_animations[i].shaders)
 			// if _count > 0{
-			// 	var _shader_effect = animations[i].shaders[_count - 1]
+			// 	var _shader_effect = gma_animations[i].shaders[_count - 1]
 			// 	shader_set(_shader_effect.shader)
 			// 	_shader_effect.set()
 				
 			// }
-			animations[i].__animation_shader_set();
-			animations[i].__draw(_x, _y);
+			gma_animations[i].__animation_shader_set();
+			gma_animations[i].__draw(_x, _y);
 			shader_reset();
 		}
 		return;
 	}
-	animations[_track].__animation_shader_set();
-	animations[_track].__draw(_x, _y);
+	gma_animations[_track].__animation_shader_set();
+	gma_animations[_track].__draw(_x, _y);
 	shader_reset();
 }
 
@@ -140,16 +145,16 @@ function animation_draw_ext(_x = undefined, _y = undefined, _image_index = undef
 	__animation_error_checks
 	
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-			if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+			if gma_animations[i] == 0 {
 				continue;
 			}
-			animations[i].__draw_ext(_image_index, _x, _y, _image_xscale, _image_yscale, _image_angle, _image_blend, _image_alpha);
+			gma_animations[i].__draw_ext(_image_index, _x, _y, _image_xscale, _image_yscale, _image_angle, _image_blend, _image_alpha);
 		}
 		return;
 	}	
 	
-	animations[_track].__draw_ext(_image_index, _x, _y, _image_xscale, _image_yscale, _image_angle, _image_blend, _image_alpha);
+	gma_animations[_track].__draw_ext(_image_index, _x, _y, _image_xscale, _image_yscale, _image_angle, _image_blend, _image_alpha);
 }
 
 /// @desc Set the instance's collision mask to match the specified animation track. Effects (such as shake, squash and stretch) will not affect the mask's position or size.
@@ -162,9 +167,9 @@ function animation_draw_ext(_x = undefined, _y = undefined, _image_index = undef
 function animation_set_instance_mask(_mask = -1, _use_scale = false, _use_angle = false, _track = 0) {
 	__animation_error_checks
 	
-	var _anim = animations[_track];
+	var _anim = gma_animations[_track];
 	mask_index = _mask == -1 ? _anim.sprite_index : _mask;
-	//image_index = _anim.image_index;
+	image_index = _anim.image_index;
 	if _use_scale == true {
 		image_xscale = _anim.image_xscale;
 		image_yscale = _anim.image_yscale;
@@ -180,22 +185,22 @@ function animation_set_instance_mask(_mask = -1, _use_scale = false, _use_angle 
 function animation_get(_track = 0) {
 	__animation_error_checks
 	if _track == all {
-		return animations;
+		return gma_animations;
 	}
-	return animations[_track];	
+	return gma_animations[_track];	
 }
 
 /// @desc Checks whether an animation exists on the specified track.
 /// @param {Real} _track The track to check.
 /// @return {Bool} Whether the animation exists or not
 function animation_exists(_track = 0) {
-	if !variable_instance_exists(id, "animations") { 
+	if !variable_instance_exists(id, "gma_animations") { 
 		return false;
 	}
-	if array_length(animations) <= _track or animations[_track] == 0 {
+	if array_length(gma_animations) <= _track or gma_animations[_track] == 0 {
 		return false;	
 	}
-	if instanceof(animations[_track]) == "__animation" {
+	if instanceof(gma_animations[_track]) == "__animation" {
 		return true;	
 	}
 	return false;
@@ -207,13 +212,13 @@ function animation_delete(_track) {
 	__animation_error_checks
 	
 	if _track == all {
-		array_resize(animations, 0);
+		array_resize(gma_animations, 0);
 		return;
 	}
-	animations[_track] = 0;
-	for (var i = array_length(animations) - 1; i > -1; i--;) {
-	    if animations[i] == 0 {
-			array_delete(animations, i, 1);	
+	gma_animations[_track] = 0;
+	for (var i = array_length(gma_animations) - 1; i > -1; i--;) {
+	    if gma_animations[i] == 0 {
+			array_delete(gma_animations, i, 1);	
 		}
 		else {
 			break;	
@@ -227,7 +232,7 @@ function animation_delete(_track) {
 function animation_finished(_track = 0) {
 	__animation_error_checks;
 	
-	return animations[_track].finished;
+	return gma_animations[_track].finished;
 }
 
 /// @desc Checks if an animation reached the end of it's last frame this step.
@@ -238,11 +243,11 @@ function animation_finished_on(_sprite = undefined, _track = 0) {
 	__animation_error_checks;
 	
 	if is_undefined(_sprite) {
-		return animations[_track].finished;
+		return gma_animations[_track].finished;
 	}
 	
-	if animations[_track].sprite_index == _sprite{
-	    return animations[_track].finished;
+	if gma_animations[_track].sprite_index == _sprite{
+	    return gma_animations[_track].finished;
     }
     return false;
 }
@@ -253,7 +258,7 @@ function animation_finished_on(_sprite = undefined, _track = 0) {
 function animation_on_last_frame(_frame, _track = 0) {
 	__animation_error_checks;
 	
-	if floor(animations[_track].image_index) == floor(animations[_track].image_number - 1) {
+	if floor(gma_animations[_track].image_index) == floor(gma_animations[_track].image_number - 1) {
 		return true;	
 	}
 }
@@ -267,12 +272,12 @@ function animation_on_frame(_frame, _track = 0) {
 	
 	if is_array(_frame) {
 		for (var i = 0, _len = array_length(_frame); i < _len; ++i) {
-			if floor(animations[_track].image_index) == floor(_frame[i]) {
+			if floor(gma_animations[_track].image_index) == floor(_frame[i]) {
 				return true;	
 			}
 		}
 	}
-	else if floor(animations[_track].image_index) == floor(_frame) {
+	else if floor(gma_animations[_track].image_index) == floor(_frame) {
 		return true;	
 	}
 }
@@ -286,12 +291,12 @@ function animation_enter_frame(_frame, _track = 0) {
 	
 	if is_array(_frame) {
 		for (var i = 0, _len = array_length(_frame); i < _len; ++i) {
-			if animations[_track].new_frame == floor(_frame[i]) {
+			if gma_animations[_track].new_frame == floor(_frame[i]) {
 				return true;	
 			}
 		}
 	}
-	else if animations[_track].new_frame == floor(_frame) {
+	else if gma_animations[_track].new_frame == floor(_frame) {
 		return true;	
 	}
 }
@@ -305,15 +310,15 @@ function animation_set_variable(_variable_name, _value, _track = 0) {
 	__animation_error_checks
 	
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		    if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
 				continue;
 			}
-			animations[i][$ _variable_name] = _value;
+			gma_animations[i][$ _variable_name] = _value;
 		}
 		return;
 	}
-	animations[_track][$ _variable_name] = _value;
+	gma_animations[_track][$ _variable_name] = _value;
 }
 
 /// @desc Sets looping for the animation on the specified track. 
@@ -322,15 +327,15 @@ function animation_set_variable(_variable_name, _value, _track = 0) {
 function animation_set_looping(_loop, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-			if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+			if gma_animations[i] == 0 {
 				continue;
 			}
-			animations[i].loop = _pause;	
+			gma_animations[i].loop = _pause;	
 		}
 		return;
 	}
-	animations[_track].loop = _loop;
+	gma_animations[_track].loop = _loop;
 }
 
 /// @desc Checks if the specified track is looping or not.
@@ -339,7 +344,7 @@ function animation_set_looping(_loop, _track = 0) {
 function animation_get_looping(_track = 0) {
 	__animation_error_checks
 	
-	return animations[_track].loop;
+	return gma_animations[_track].loop;
 }
 
 /// @desc Returns the width of the animation, image_xscale factored in. Equivalent to GM's built in sprite_width.
@@ -347,7 +352,7 @@ function animation_get_looping(_track = 0) {
 function animation_get_sprite_width(_track = 0) {
 	__animation_error_checks
 	
-	var _anim = animations[_track];
+	var _anim = gma_animations[_track];
 	return sprite_get_width(_anim.sprite_index)*abs(_anim.image_xscale);
 }
 
@@ -356,6 +361,6 @@ function animation_get_sprite_width(_track = 0) {
 function animation_get_sprite_height(_track = 0) {
 	__animation_error_checks
 	
-	var _anim = animations[_track];
+	var _anim = gma_animations[_track];
 	return sprite_get_height(_anim.sprite_index)*abs(_anim.image_yscale);
 }

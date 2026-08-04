@@ -6,7 +6,7 @@ function __shader_effect() constructor{
 	owner = other.id;
 
 	static __animation_shader_get_index = function() {
-		var _shader_array = owner.animations[track].shaders;
+		var _shader_array = owner.gma_animations[track].shaders;
 		for (var i = 0, _len = array_length(_shader_array); i < _len; ++i) {
 		    if _shader_array[i] == self {
 				return i;
@@ -57,7 +57,7 @@ function __animation_shader_flash(_label, _duration, _color, _mix, _priority, _o
     		}
     		if remove{
     			var _index = __animation_shader_get_index();
-				array_delete(owner.animations[track].shaders, _index, 1);
+				array_delete(owner.gma_animations[track].shaders, _index, 1);
 				return
     		}
     	}
@@ -66,7 +66,7 @@ function __animation_shader_flash(_label, _duration, _color, _mix, _priority, _o
 }
 
 function __animation_shader_remove(_name, _label, _track){
-	var _shaders = animations[_track].shaders;
+	var _shaders = gma_animations[_track].shaders;
 	for (var i = array_length(_shaders) - 1; i > -1; i--;) {
 		if is_undefined(_label){
 			if _shaders[i].name == _name {

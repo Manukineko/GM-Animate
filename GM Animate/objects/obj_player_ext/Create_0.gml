@@ -124,8 +124,8 @@ run.step = function() {
 
 jump = new create_state();
 jump.enter = function() {
-	animation_change(sprKnight_Jump_Up_Bow, 0, false);
-	animation_queue_add(sprKnight_Jump_Airborne_Bow, false);
+	animation_change(sprKnight_Jump_Up_Bow, 0, false, sprMaskDefault);
+	animation_queue_add(sprKnight_Jump_Airborne_Bow, false, -1);
 	animation_effect_squash_and_strech(30, 0.4, false, animation_curve_bounce_twice, true);
 	vsp = -jump_speed;
 }
@@ -174,7 +174,7 @@ shoot.step = function() {
 }
 
 state = idle;
-anim = animation_start(sprKnight_Idle_Bow, , , true, GMA_MASK.SAME_SPRITE);
+anim = animation_start(sprKnight_Idle_Bow, , , false, GMA_MASK.SAME_SPRITE);
 var _read_animlist = function(_sprite){
 	if !is_string(_sprite) return _sprite
 	return animlist[$ _sprite];

@@ -3,10 +3,10 @@
 > - [x] **Remove the mapper system**  
 > The implementation is crap. It's better to have something external, like "GM-Spritinate", or GM-Farfadate (XD french play-on-word between Farfadet and Sprite)
 
-> - [ ] **Rename the `animations` variable to `gma_animations` in order to avoid clashing name**  
+> - [x] **Rename the `animations` variable to `gma_animations` in order to avoid clashing name**  
 >  "animations" is too generique and can be already in use by the user
 
-> - [ ] **Set the Mask management globally for the track**  
+> - [x] **Set the Mask management globally for the track**  
 > Allow to override the mask or set back to the default behaviour when calling `animation_change`  
 > 	- By default, it would assigned the `mask_index` of the calling instance to the sprite set by `animation_change`in order to mimic GM's behaviour', the user could set the collision mask parametters in the IDE.
 >	- Or they could set a default sprite as the `mask_index` either in `animation_start` or directly on the calling instance, in the IDE (however, the latter means all track would have the same collision mask by default.) 

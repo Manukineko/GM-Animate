@@ -16,13 +16,13 @@
 function animation_shader_flash(_label, _duration, _color, _mix = 0, _priority = 10, _on_finish = undefined, _remove = false, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		    if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
 				continue;
 			}
 			__animation_shader_remove("flash", _label, i)
-			array_push(animations[i].shaders, new __animation_shader_flash(_label, _duration, _color, _mix, _priority, _on_finish, _remove, i));
-			array_sort(animations[i].shaders, function(a, b) {
+			array_push(gma_animations[i].shaders, new __animation_shader_flash(_label, _duration, _color, _mix, _priority, _on_finish, _remove, i));
+			array_sort(gma_animations[i].shaders, function(a, b) {
                 return a.priority - b.priority;
             });
 			
@@ -30,8 +30,8 @@ function animation_shader_flash(_label, _duration, _color, _mix = 0, _priority =
 		return;
 	}
 	__animation_shader_remove("flash", _label, _track)
-	array_push(animations[_track].shaders, new __animation_shader_flash(_label, _duration, _color, _mix, _priority, _on_finish, _remove, _track));
-	array_sort(animations[_track].shaders, function(a, b) {
+	array_push(gma_animations[_track].shaders, new __animation_shader_flash(_label, _duration, _color, _mix, _priority, _on_finish, _remove, _track));
+	array_sort(gma_animations[_track].shaders, function(a, b) {
         return a.priority - b.priority;
     });
 	
@@ -47,8 +47,8 @@ function animation_shader_flash(_label, _duration, _color, _mix = 0, _priority =
 function animation_shader_cancel(_name, _label = undefined, _track = 0) {
 	__animation_error_checks;
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; i++;) {
-			if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; i++;) {
+			if gma_animations[i] == 0 {
 				continue;	
 			}
 			__animation_shader_remove(_name, _label, _track);

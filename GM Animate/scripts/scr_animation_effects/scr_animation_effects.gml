@@ -7,15 +7,15 @@
 function animation_effect_shake(_duration, _intensity, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		    if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_shake(_duration, _intensity, i));
+			array_push(gma_animations[i].effects, new __animation_effect_shake(_duration, _intensity, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_shake(_duration, _intensity, _track));
+	array_push(gma_animations[_track].effects, new __animation_effect_shake(_duration, _intensity, _track));
 }
 
 /// @desc Starts a squash and stretch effect for the specified track. 
@@ -34,15 +34,15 @@ function animation_effect_shake(_duration, _intensity, _track = 0) {
 function animation_effect_squash_and_strech(_duration, _scale, _loop_count = 1, _curve = animation_curve_bounce_thrice, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		   	if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		   	if gma_animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, , _on_finish, i));
+			array_push(gma_animations[i].effects, new __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, , _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, _track));
+	array_push(gma_animations[_track].effects, new __animation_effect_squash_and_stretch(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 /// @desc Starts a pulse for the specified track. 
@@ -60,15 +60,15 @@ function animation_effect_squash_and_strech(_duration, _scale, _loop_count = 1, 
 function animation_effect_pulse(_duration, _scale, _loop_count = 1, _curve = animation_curve_bounce_once, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		    if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, i));
+			array_push(gma_animations[i].effects, new __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, _track));
+	array_push(gma_animations[_track].effects, new __animation_effect_pulse(_duration, _scale, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 /// @desc Starts a sway effect for the specified track. 
@@ -87,15 +87,15 @@ function animation_effect_pulse(_duration, _scale, _loop_count = 1, _curve = ani
 function animation_effect_sway(_duration, _range, _x_offset = 0, _y_offset = 0, _loop_count = 1, _curve = animation_curve_wave, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		    if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, _on_finish, i));
+			array_push(gma_animations[i].effects, new __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, _on_finish, _track));
+	array_push(gma_animations[_track].effects, new __animation_effect_sway(_duration, _range, _x_offset, _y_offset, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 /// @desc Starts an oscillate effect for the specified track. 
@@ -112,15 +112,15 @@ function animation_effect_sway(_duration, _range, _x_offset = 0, _y_offset = 0, 
 function animation_effect_oscillate(_duration, _range, _direction = 90, _loop_count = 1, _curve = animation_curve_wave, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		    if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, _on_finish, i));
+			array_push(gma_animations[i].effects, new __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, _on_finish, _track));
+	array_push(gma_animations[_track].effects, new __animation_effect_oscillate(_duration, _range, _direction, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 /// @desc Starts a blink effect for the specified track. 
@@ -136,15 +136,15 @@ function animation_effect_oscillate(_duration, _range, _direction = 90, _loop_co
 function animation_effect_blink(_duration, _alpha_range, _loop_count = 1, _curve = animation_curve_wave, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		    if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, _on_finish, i));
+			array_push(gma_animations[i].effects, new __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, _on_finish, _track));
+	array_push(gma_animations[_track].effects, new __animation_effect_blink(_duration, _alpha_range, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 
@@ -155,15 +155,15 @@ function animation_effect_blink(_duration, _alpha_range, _loop_count = 1, _curve
 function animation_effect_hitstop(_duration, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		    if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_hitstop(_duration, i));
+			array_push(gma_animations[i].effects, new __animation_effect_hitstop(_duration, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_hitstop(_duration, _track));
+	array_push(gma_animations[_track].effects, new __animation_effect_hitstop(_duration, _track));
 }
 
 /// @desc Starts a colorize effect for the specified track.
@@ -177,15 +177,15 @@ function animation_effect_hitstop(_duration, _track = 0) {
 function animation_effect_color_blender(_duration, _color, _intensity = 1, _reset = true, _from_color = false, _on_finish = undefined, _track = 0){
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		    if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_color_blender(_duration, _color, _intensity, _reset, _from_color, _on_finish, i));
+			array_push(gma_animations[i].effects, new __animation_effect_color_blender(_duration, _color, _intensity, _reset, _from_color, _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_color_blender(_duration, _color, _intensity, _reset, _from_color, _on_finish, _track));
+	array_push(gma_animations[_track].effects, new __animation_effect_color_blender(_duration, _color, _intensity, _reset, _from_color, _on_finish, _track));
 }
 
 /// @desc Starts a flash color effect for the specified track. 
@@ -202,42 +202,42 @@ function animation_effect_color_blender(_duration, _color, _intensity = 1, _rese
 function animation_effect_colors_transition(_duration, _color_start, _color_end, _loop_count = 1, _curve = animation_curve_wave, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		    if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_colors_transition(_duration, _color_start, _color_end, _loop_count, _curve, _reverse_xy, _on_finish, i));
+			array_push(gma_animations[i].effects, new __animation_effect_colors_transition(_duration, _color_start, _color_end, _loop_count, _curve, _reverse_xy, _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_colors_transition(_duration, _color_start, _color_end, _loop_count, _curve, _reverse_xy, _on_finish, _track));
+	array_push(gma_animations[_track].effects, new __animation_effect_colors_transition(_duration, _color_start, _color_end, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 function animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_count = 1, _curve = animation_curve_bounce_thrice, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		   	if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		   	if gma_animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_count, _curve, _reverse_xy, , _on_finish, i));
+			array_push(gma_animations[i].effects, new __animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_count, _curve, _reverse_xy, , _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_count, _curve, _reverse_xy, _on_finish, _track));
+	array_push(gma_animations[_track].effects, new __animation_effect_flash_scale(_duration, _scale_x, _scale_y, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 function animation_effect_scale(_duration, _scale_x_start, _scale_y_start, _scale_x_end, _scale_y_end, _loop_count = 1, _curve = animation_curve_bounce_thrice, _reverse_xy = false, _on_finish = undefined, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-		   	if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		   	if gma_animations[i] == 0 {
 				continue;
 			}
-			array_push(animations[i].effects, new __animation_effect_scale(_duration, _scale_x_start, _scale_y_start, _scale_x_end, _scale_y_end, _loop_count, _curve, _reverse_xy, , _on_finish, i));
+			array_push(gma_animations[i].effects, new __animation_effect_scale(_duration, _scale_x_start, _scale_y_start, _scale_x_end, _scale_y_end, _loop_count, _curve, _reverse_xy, , _on_finish, i));
 		}
 		return;
 	}
-	array_push(animations[_track].effects, new __animation_effect_scale(_duration, _scale_x_start, _scale_y_start, _scale_x_end, _scale_y_end, _loop_count, _curve, _reverse_xy, _on_finish, _track));
+	array_push(gma_animations[_track].effects, new __animation_effect_scale(_duration, _scale_x_start, _scale_y_start, _scale_x_end, _scale_y_end, _loop_count, _curve, _reverse_xy, _on_finish, _track));
 }
 
 /// @desc Counts how many instances of an effect are active on the specified track.
@@ -249,8 +249,8 @@ function animation_effect_get_count(_effect_name, _track = 0) {
 	
 	if _track == all {
 		var _effect_count = 0;
-		for (var i = 0, _len = array_length(animations); i < _len; ++i) {
-			var _effects = animations[i].effects;
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+			var _effects = gma_animations[i].effects;
 			for (var j = 0, _len2 = array_length(_effects); j < _len2; ++j) {
 			    if _effects[j].name == _effect_name {
 					_effect_count += 1;
@@ -259,7 +259,7 @@ function animation_effect_get_count(_effect_name, _track = 0) {
 		}
 		return _effect_count;
 	}	
-	var _effects = animations[_track].effects;
+	var _effects = gma_animations[_track].effects;
 	var _effect_count = 0;
 	for (var i = 0, _len = array_length(_effects); i < _len; ++i) {
 	    if _effects[i].name == _effect_name {
@@ -275,11 +275,11 @@ function animation_effect_get_count(_effect_name, _track = 0) {
 function animation_effect_cancel(_effect_name, _track = 0) {
 	__animation_error_checks
 	if _track == all {
-		for (var i = 0, _len = array_length(animations); i < _len; i++;) {
-			if animations[i] == 0 {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; i++;) {
+			if gma_animations[i] == 0 {
 				continue;	
 			}
-			var _effects = animations[i].effects;
+			var _effects = gma_animations[i].effects;
 			for (var j = array_length(_effects) - 1; j > -1; j--;) {
 			    if _effects[j].name == _effect_name {
 					array_delete(_effects, j, 1);
@@ -288,7 +288,7 @@ function animation_effect_cancel(_effect_name, _track = 0) {
 		}
 		return;
 	}
-	var _effects = animations[_track].effects;
+	var _effects = gma_animations[_track].effects;
 	for (var i = array_length(_effects) - 1; i > -1; i--;) {
 		if _effects[i].name == _effect_name {
 			array_delete(_effects, i, 1);

@@ -2,13 +2,14 @@
 /// @param {asset.GMSprite} _sprite The sprite to add to the queue.
 /// @param {Bool} _loop Whether the queued animation should loop when it finishes. Note: if there are more animations queued after this one,
 /// then this argument won't make a difference.
+/// @param {GMAsset.Sprite|Undefined} _mask_override The mask_index to use for that sprite. Can be a Sprite or -1. If auto_mask is enable, it will revert to the mask defined by the mode set in `animation_start`
 /// @param {Real} _track The track to queue the animation for.
-function animation_queue_add(_sprite, _loop = true, _mask_override = -1, _track = 0) {
+function animation_queue_add(_sprite, _loop = true, _mask_override = undefined, _track = 0) {
 	__animation_error_checks
     
-	array_push(animations[_track].queue, {
+	array_push(gma_animations[_track].queue, {
 		sprite_index : _sprite,
-		mask_override: _mask_override,
+		mask_index: _mask_override,
 		loop : _loop
 	});	
 }
@@ -18,17 +19,19 @@ function animation_queue_add(_sprite, _loop = true, _mask_override = -1, _track 
 /// @param {Real} _index The position in the queue to insert the animation into.
 /// @param {Bool} _loop Whether the queued animation should loop when it finishes. Note: if there are more animations queued after this one,
 /// then this argument won't make a difference.
+/// @param {GMAsset.Sprite|Undefined} _mask_override The mask_index to use for that sprite. Can be a Sprite or -1. If auto_mask is enable, it will revert to the mask defined by the mode set in `animation_start`
 /// @param {Real} _track The track to queue the animation for.
-function animation_queue_insert(_sprite, _index, _loop = true, _track = 0) {
+function animation_queue_insert(_sprite, _index, _loop = true, _mask_override = undefined, _track = 0) {
 	__animation_error_checks
     
 	
-	if _index > array_length(animations[_track].queue) {
-		animation_queue_add(_sprite, _loop, _track);
+	if _index > array_length(gma_animations[_track].queue) {
+		animation_queue_add(_sprite, _loop, _mask_override, _track);
 		return;
 	}
-	array_insert(animations[_track].queue, _index, {
+	array_insert(gma_animations[_track].queue, _index, {
 		sprite_index : _sprite,
+		mask_index: _mask_override,
 		loop : _loop
 	});	
 }
@@ -38,7 +41,7 @@ function animation_queue_insert(_sprite, _index, _loop = true, _track = 0) {
 function animation_queue_clear(_track = 0) {
 	__animation_error_checks
 	
-	array_resize(animations[_track].queue, 0);
+	array_resize(gma_animations[_track].queue, 0);
 }
 
 /// @desc Removes whatever sprite is in the queue at the specified position.
@@ -47,7 +50,7 @@ function animation_queue_clear(_track = 0) {
 function animation_queue_remove_index(_index, _track = 0) {
 	__animation_error_checks
 	
-	var _queue = animations[_track].queue;
+	var _queue = gma_animations[_track].queue;
 	if array_length(_queue) - 1 >= _index {
 		array_delete(_queue, _index, 1);
 	}
@@ -63,7 +66,7 @@ function animation_queue_remove_index(_index, _track = 0) {
 function animation_queue_remove_sprite(_sprite, _track = 0) {
 	__animation_error_checks
 	
-	var _queue = animations[_track].queue;
+	var _queue = gma_animations[_track].queue;
 	for (var i = array_length(queue) - 1; i > -1; i--) {
 	    if _queue[i].sprite_index == _sprite {
 			array_delete(_queue, i, 1);
@@ -77,7 +80,7 @@ function animation_queue_remove_sprite(_sprite, _track = 0) {
 function animation_queue_get_length(_track = 0) {
 	__animation_error_checks
 	
-	return array_length(animations[_track].queue);
+	return array_length(gma_animations[_track].queue);
 }
 
 /// @desc Returns an array of all queued sprites.
@@ -86,7 +89,7 @@ function animation_queue_get_length(_track = 0) {
 function animation_queue_get(_track = 0) {
 	__animation_error_checks	
 	var _array = [];
-	var _queue = animations[_track].queue;
+	var _queue = gma_animations[_track].queue;
 	for (var i = 0, _len = array_length(queue); i < _len; ++i) {
 	    _array[i] = _queue[i].sprite_index;
 	}
@@ -100,7 +103,7 @@ function animation_queue_get(_track = 0) {
 function animation_queue_get_index(_sprite, _track = 0) {
 	__animation_error_checks
 	
-	var _queue = animations[_track].queue;
+	var _queue = gma_animations[_track].queue;
 	for (var i = 0, _len = array_length(_queue); i < _len; ++i) {
 	    if _queue[i].sprite_index == _sprite {
 			return i;
@@ -117,7 +120,7 @@ function animation_queue_get_all_indexes(_sprite, _track = 0) {
 	__animation_error_checks
 	
 	var _positions = [];
-	var _queue = animations[_track].queue;
+	var _queue = gma_animations[_track].queue;
 	for (var i = 0, _len = array_length(_queue); i < _len; ++i) {
 	    if queue[i].sprite_index == _sprite {
 			array_push(_positions, i);	

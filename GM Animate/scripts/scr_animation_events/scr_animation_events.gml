@@ -13,8 +13,8 @@ function animation_event_add(_sprite, _frames, _callback, _callback_scope = self
 	var _event = new __animation_event(_frames, method(_callback_scope, _callback), _track);
 	
 	if _track == all {
-		for(var i = 0, _len = array_length(animations); i < _len; i++) {
-			if animations[i] == 0 {
+		for(var i = 0, _len = array_length(gma_animations); i < _len; i++) {
+			if gma_animations[i] == 0 {
 				continue;	
 			}
 			__animation_add_event_to_sprite(_sprite, i, _event);
@@ -35,8 +35,8 @@ function animation_event_remove(_event, _track = 0) {
 	__animation_error_checks
 	
 	if _track == all {
-		for(var i = 0, _len = array_length(animations); i < _len; i++) {
-			if animations[i] == 0 {
+		for(var i = 0, _len = array_length(gma_animations); i < _len; i++) {
+			if gma_animations[i] == 0 {
 				continue;	
 			}
 			__animation_remove_event(_event, i);
@@ -50,11 +50,11 @@ function animation_event_remove(_event, _track = 0) {
 function animation_event_remove_all() {
 	__animation_array_error();
 	
-	for(var i = 0, _len = array_length(animations); i < _len; i++) {
-		if animations[i] == 0 {
+	for(var i = 0, _len = array_length(gma_animations); i < _len; i++) {
+		if gma_animations[i] == 0 {
 			continue;	
 		}
-		animations[i].events = {};
+		gma_animations[i].events = {};
 	}
 }
 
