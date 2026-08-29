@@ -74,6 +74,7 @@
     {"id":{"name":"obj_wall","path":"objects/obj_wall/obj_wall.yy",},},
     {"id":{"name":"Room_ext","path":"rooms/Room_ext/Room_ext.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"id":{"name":"__ExtendedImages","path":"scripts/__ExtendedImages/__ExtendedImages.yy",},},
     {"id":{"name":"__scr_animation_core","path":"scripts/__scr_animation_core/__scr_animation_core.yy",},},
     {"id":{"name":"__scr_animation_effect_constructors","path":"scripts/__scr_animation_effect_constructors/__scr_animation_effect_constructors.yy",},},
     {"id":{"name":"__scr_animation_event_control","path":"scripts/__scr_animation_event_control/__scr_animation_event_control.yy",},},

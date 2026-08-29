@@ -171,8 +171,8 @@ function animation_set_instance_mask(_mask = -1, _use_scale = false, _use_angle 
 	mask_index = _mask == -1 ? _anim.sprite_index : _mask;
 	image_index = _anim.image_index;
 	if _use_scale == true {
-		image_xscale = _anim.image_xscale;
-		image_yscale = _anim.image_yscale;
+		image_xscale = _anim.image_xscale * _anim.image_flip_h;
+		image_yscale = _anim.image_yscale * _anim.image_flip_v;
 	}
 	if _use_angle == true {
 		image_angle = _anim.image_angle;	
@@ -299,6 +299,45 @@ function animation_enter_frame(_frame, _track = 0) {
 	else if gma_animations[_track].new_frame == floor(_frame) {
 		return true;	
 	}
+}
+function animation_flip_horizontal(_bool, _track = 0){
+    __animation_error_checks
+    
+    if _track == all {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
+				continue;
+			}
+			gma_animations[i].image_flip_h = _bool ? -1 : 1;
+		}
+		return;
+	}
+	gma_animations[_track].image_flip_h = _bool ? -1 : 1;
+}
+
+function animation_flip_vertical(_bool, _track = 0){
+    __animation_error_checks
+    
+    if _track == all {
+		for (var i = 0, _len = array_length(gma_animations); i < _len; ++i) {
+		    if gma_animations[i] == 0 {
+				continue;
+			}
+			gma_animations[i].image_flip_v = _bool ? -1 : 1;
+		}
+		return;
+	}
+	gma_animations[_track].image_flip_v = _bool ? -1 : 1;
+}
+function animation_is_flip_vertical(_track = 0){
+    __animation_error_checks
+    
+	return gma_animations[_track].image_flip_v == -1;
+}
+function animation_is_flip_horizontal(_track = 0){
+    __animation_error_checks
+    
+	return gma_animations[_track].image_flip_h == -1;
 }
 
 /// @desc Sets a variable for the specified track. Can be used to set a variable for all tracks at once.

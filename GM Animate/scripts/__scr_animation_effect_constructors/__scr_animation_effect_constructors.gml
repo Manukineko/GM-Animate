@@ -216,6 +216,26 @@ function __animation_effect_hitstop(_duration, _on_finish, _track = 0) : __anima
 	}
 }
 
+//function __animation_effects_spinning(_duration, _loop_count, _curve, _on_finish, _track = 0) : __animation_effect() constructor{
+//    duration = _duration;
+//    loop_count = _loop_count
+//    curve = _curve;
+//    on_finish = _on_finish;
+//    track = _track;
+//    name = "spinning"
+    
+//    __animation_channel_setup(false);
+   
+//    static step = function(){
+//        __animation_progress_curve();
+		
+//		var _x_prog = animcurve_channel_evaluate(x_channel, curve_progress);
+//		var _anim = owner.gma_animations[track];
+//		_anim.xscale_offset += lerp(1,-1, _x_prog);
+//        if sign(_x_prog) != 0 _anim.image_flip_h = sign(_x_prog)
+//    }
+//}
+
 function __animation_effect_color_blender(_duration, _color, _intensity, _reset, _from_color, _on_finish, _track = 0) : __animation_effect() constructor {
 	duration = _duration
 	reset = _reset
