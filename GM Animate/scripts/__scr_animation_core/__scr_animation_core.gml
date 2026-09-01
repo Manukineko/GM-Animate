@@ -39,8 +39,8 @@ function __animation(_sprite, _loop = true, _mask_auto = false, _mask_auto_type 
 	image_angle = 0;
 	image_blend = c_white;
 	image_alpha = 1;
-    image_flip_h = 1;
-    image_flip_v = 1;
+    image_flip_x = 1;
+    image_flip_y = 1;
 	loop = _loop;
 	paused = false;
 	effect_pause = false;
@@ -150,7 +150,7 @@ function __animation(_sprite, _loop = true, _mask_auto = false, _mask_auto_type 
 			array_delete(queue, 0, 1);
 			sprite_index = _queue_data.sprite_index;
 			mask_index = _queue_data.mask_index
-			image_index = 0;
+			image_index = _queue_data.image_index;
 			image_speed = 1;
 			finished = false; // reset in order to trigger the finished flag on the queueed sprite
 			loop = _queue_data.loop;
@@ -239,8 +239,8 @@ function __animation(_sprite, _loop = true, _mask_auto = false, _mask_auto_type 
         var _image_xscale = abs(image_xscale)
         var _image_yscale = abs(image_yscale)
 		draw_sprite_ext(sprite_index, image_index, _x + x_offset, _y + y_offset,
-        (_image_xscale + (xscale_offset * _image_xscale)) * image_flip_h, 
-		(_image_yscale + (yscale_offset * _image_yscale)) * image_flip_v, 
+        (_image_xscale + (xscale_offset * _image_xscale)) * image_flip_x, 
+		(_image_yscale + (yscale_offset * _image_yscale)) * image_flip_y, 
 		image_angle + angle_offset, image_blend, image_alpha - alpha_offset);
 	}
 	
@@ -249,8 +249,9 @@ function __animation(_sprite, _loop = true, _mask_auto = false, _mask_auto_type 
 		
         _image_xscale = abs(_image_xscale)
         _image_yscale = abs(_image_yscale)
-        draw_sprite_ext(sprite_index, _image_index, _x + x_offset, _y + y_offset, (_image_xscale + (xscale_offset * _image_xscale)) * image_flip_h, 
-		(_image_yscale + (yscale_offset * _image_yscale)) * image_flip_v, 
+        draw_sprite_ext(sprite_index, _image_index, _x + x_offset, _y + y_offset,
+        (_image_xscale + (xscale_offset * _image_xscale)) * image_flip_x, 
+		(_image_yscale + (yscale_offset * _image_yscale)) * image_flip_y, 
 		_image_angle + angle_offset, _image_blend, _image_alpha - alpha_offset);
 	}
 }

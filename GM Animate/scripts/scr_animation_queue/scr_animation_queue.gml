@@ -1,15 +1,19 @@
 /// @desc Adds a sprite to the end of the animation queue.
 /// @param {asset.GMSprite} _sprite The sprite to add to the queue.
+/// @param {Real} _starting_image_index The frame to start the new animation on. Pass -1 to not change image_index and keep the frame of the previous animation.
 /// @param {Bool} _loop Whether the queued animation should loop when it finishes. Note: if there are more animations queued after this one,
 /// then this argument won't make a difference.
 /// @param {GMAsset.Sprite|Undefined} _mask_override The mask_index to use for that sprite. Can be a Sprite or -1. If auto_mask is enable, it will revert to the mask defined by the mode set in `animation_start`
 /// @param {Real} _track The track to queue the animation for.
-function animation_queue_add(_sprite, _loop = true, _mask_override = undefined, _track = 0) {
+function animation_queue_add(_sprite, _starting_image_index = 0, _loop = true, _mask_override = undefined, _track = 0) {
 	__animation_error_checks
+    
+    var _image_index = _starting_image_index != -1 ? _starting_image_index : gma_animations[_track].image_index
     
 	array_push(gma_animations[_track].queue, {
 		sprite_index : _sprite,
 		mask_index: _mask_override,
+        image_index : _image_index,
 		loop : _loop
 	});	
 }
@@ -17,21 +21,24 @@ function animation_queue_add(_sprite, _loop = true, _mask_override = undefined, 
 /// @desc Inserts a sprite into the specified position in the queue.
 /// @param {asset.GMSprite} _sprite The sprite asset to add to the queue.
 /// @param {Real} _index The position in the queue to insert the animation into.
+/// @param {Real} _starting_image_index The frame to start the new animation on. Pass -1 to not change image_index and keep the frame of the previous animation.
 /// @param {Bool} _loop Whether the queued animation should loop when it finishes. Note: if there are more animations queued after this one,
 /// then this argument won't make a difference.
 /// @param {GMAsset.Sprite|Undefined} _mask_override The mask_index to use for that sprite. Can be a Sprite or -1. If auto_mask is enable, it will revert to the mask defined by the mode set in `animation_start`
 /// @param {Real} _track The track to queue the animation for.
-function animation_queue_insert(_sprite, _index, _loop = true, _mask_override = undefined, _track = 0) {
+function animation_queue_insert(_sprite, _index, _starting_image_index = 0, _loop = true, _mask_override = undefined, _track = 0) {
 	__animation_error_checks
     
+    var _image_index = _starting_image_index != -1 ? _starting_image_index : gma_animations[_track]
 	
 	if _index > array_length(gma_animations[_track].queue) {
-		animation_queue_add(_sprite, _loop, _mask_override, _track);
+		animation_queue_add(_sprite, _image_index, _loop, _mask_override, _track);
 		return;
 	}
 	array_insert(gma_animations[_track].queue, _index, {
 		sprite_index : _sprite,
 		mask_index: _mask_override,
+        image_index : _image_index,
 		loop : _loop
 	});	
 }
